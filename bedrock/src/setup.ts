@@ -1,14 +1,17 @@
-import { ItemCustomComponent, ItemStack, Player, system, world } from "@minecraft/server";
+import { ItemCustomComponent, Player, system, world } from "@minecraft/server";
 import { ActionFormData, MessageFormData } from "@minecraft/server-ui";
-import { spawnMarkersIn } from "./spawns.ts";
+import { placeStructure, spawnMarkersIn } from "./spawns.ts";
 import { announceChapter, currentChapter, currentChapterKey, give } from "./story.ts";
 import { CHAPTERS } from "./storyline.ts";
 
+const VERSION = "1.1.1";
 const BUILT_KEY = "frozen:arendelle_built";
 const KIT_KEY = "frozen:kit_given";
-/** Worlds younger than this (5 minutes) on first join get Arendelle built around spawn automatically. */
-const NEW_WORLD_TICKS = 20 * 60 * 5;
-const BUILD_RETRIES = 5;
+/** Worlds younger than this (20 minutes) get Arendelle built around the first player automatically. */
+const NEW_WORLD_TICKS = 20 * 60 * 20;
+/** Phones can take a while to generate spawn chunks: retry every 3 s for about 2 minutes. */
+const BUILD_RETRIES = 40;
+const RETRY_TICKS = 60;
 const ARENDELLE = { name: "frozen:arendelle", size: { x: 33, y: 19, z: 33 }, foundation: 3, playerX: 19, playerZ: 16 };
 const KIT: [string, number][] = [
 	["frozen:storybook", 1],
@@ -18,56 +21,74 @@ const KIT: [string, number][] = [
 	["frozen:olaf_spawn_egg", 1],
 ];
 
-/** Builds Arendelle with the player on the plaza, and makes it the world spawn. */
-export function buildArendelle(player: Player): boolean {
+/** Builds Arendelle with the player on the plaza and makes it the world spawn. Throws if it can't be placed yet. */
+function placeArendelle(player: Player): void {
 	const dimension = player.dimension;
-	if (dimension.id !== "minecraft:overworld") return false;
+	if (dimension.id !== "minecraft:overworld") throw new Error("Arendelle can only be built in the Overworld");
 	const cx = Math.floor(player.location.x);
 	const cz = Math.floor(player.location.z);
+	const top = dimension.getTopmostBlock({ x: cx, z: cz });
+	if (!top) throw new Error("the ground here isn't loaded yet");
+	const floorY = top.location.y + 1;
+	const origin = { x: cx - ARENDELLE.playerX, y: floorY - ARENDELLE.foundation, z: cz - ARENDELLE.playerZ };
+	placeStructure(ARENDELLE.name, dimension, origin);
+	world.setDynamicProperty(BUILT_KEY, true);
+	system.runTimeout(() => spawnMarkersIn(dimension, origin, ARENDELLE.size), 2);
 	try {
-		const top = dimension.getTopmostBlock({ x: cx, z: cz });
-		if (!top) return false;
-		const floorY = top.location.y + 1;
-		const origin = { x: cx - ARENDELLE.playerX, y: floorY - ARENDELLE.foundation, z: cz - ARENDELLE.playerZ };
-		world.structureManager.place(ARENDELLE.name, dimension, origin);
-		world.setDynamicProperty(BUILT_KEY, true);
-		const spawn = { x: cx, y: floorY + 1, z: cz };
-		player.teleport({ x: cx + 0.5, y: spawn.y, z: cz + 0.5 });
-		world.setDefaultSpawnLocation(spawn);
-		system.runTimeout(() => spawnMarkersIn(dimension, origin, ARENDELLE.size), 2);
-		return true;
+		player.teleport({ x: cx + 0.5, y: floorY + 1, z: cz + 0.5 });
+		world.setDefaultSpawnLocation({ x: cx, y: floorY + 1, z: cz });
 	} catch (error) {
-		console.warn(`[frozen] Arendelle not built yet: ${error}`);
-		return false;
+		console.warn(`[frozen] Arendelle built, but moving the player failed: ${error}`);
+	}
+}
+
+export function buildArendelle(player: Player): string | undefined {
+	try {
+		placeArendelle(player);
+		player.sendMessage({ translate: "frozen.status.built" });
+		return undefined;
+	} catch (error) {
+		return String(error);
 	}
 }
 
 function tryBuildArendelle(player: Player, attemptsLeft: number): void {
 	system.runTimeout(() => {
 		if (!player.isValid || world.getDynamicProperty(BUILT_KEY)) return;
-		if (buildArendelle(player)) {
+		const error = buildArendelle(player);
+		if (!error) {
 			announceChapter(player);
 		} else if (attemptsLeft > 1) {
 			tryBuildArendelle(player, attemptsLeft - 1);
+		} else {
+			player.sendMessage({ translate: "frozen.status.build_failed", with: [error] });
 		}
-	}, 60);
+	}, RETRY_TICKS);
 }
 
 function giveKit(player: Player): void {
 	if (player.getDynamicProperty(KIT_KEY)) return;
-	for (const [id, amount] of KIT) give(player, new ItemStack(id, amount));
+	for (const [id, amount] of KIT) {
+		try {
+			give(player, id, amount);
+		} catch (error) {
+			console.warn(`[frozen] could not give ${id}: ${error}`);
+		}
+	}
 	player.setDynamicProperty(KIT_KEY, true);
 	player.sendMessage({ translate: "frozen.kit.welcome" });
 }
 
 function onJoin(player: Player): void {
-	giveKit(player);
-	const freshWorld = world.getAbsoluteTime() < NEW_WORLD_TICKS;
-	if (!world.getDynamicProperty(BUILT_KEY) && freshWorld) {
+	player.sendMessage({ translate: "frozen.status.loaded", with: [VERSION] });
+	const shouldBuild = !world.getDynamicProperty(BUILT_KEY) && world.getAbsoluteTime() < NEW_WORLD_TICKS;
+	if (shouldBuild) {
+		player.sendMessage({ translate: "frozen.status.building" });
 		tryBuildArendelle(player, BUILD_RETRIES);
 	} else {
 		system.runTimeout(() => player.isValid && announceChapter(player), 100);
 	}
+	giveKit(player);
 }
 
 async function showStorybook(player: Player): Promise<void> {
@@ -98,7 +119,13 @@ async function showStorybook(player: Player): Promise<void> {
 		.button1({ translate: "frozen.storybook.no" })
 		.button2({ translate: "frozen.storybook.yes" })
 		.show(player);
-	if (confirm.selection === 1 && buildArendelle(player)) announceChapter(player);
+	if (confirm.selection !== 1) return;
+	const error = buildArendelle(player);
+	if (error) {
+		player.sendMessage({ translate: "frozen.status.build_failed", with: [error] });
+	} else {
+		announceChapter(player);
+	}
 }
 
 export const storybookComponent: ItemCustomComponent = {

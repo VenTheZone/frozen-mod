@@ -1,4 +1,4 @@
-import { Block, BlockCustomComponent, Dimension, Vector3 } from "@minecraft/server";
+import { Block, BlockCustomComponent, Dimension, Vector3, world } from "@minecraft/server";
 
 export const MARKER = "frozen:spawn_marker";
 export const CHARACTER_STATE = "frozen:character";
@@ -11,6 +11,16 @@ function spawnFromMarker(block: Block): void {
 	block.setType("minecraft:air");
 	if (character) {
 		block.dimension.spawnEntity(`frozen:${character}`, location);
+	}
+}
+
+/** Places a pack structure, falling back to the /structure command if the script API refuses. Throws on failure. */
+export function placeStructure(name: string, dimension: Dimension, origin: Vector3): void {
+	try {
+		world.structureManager.place(name, dimension, origin);
+	} catch (apiError) {
+		const result = dimension.runCommand(`structure load ${name} ${origin.x} ${origin.y} ${origin.z}`);
+		if (result.successCount === 0) throw apiError;
 	}
 }
 

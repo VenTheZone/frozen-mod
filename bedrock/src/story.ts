@@ -1,5 +1,5 @@
-import { EquipmentSlot, GameMode, ItemStack, Player, RawMessage, system, Vector3, world } from "@minecraft/server";
-import { spawnMarkersIn } from "./spawns.ts";
+import { EquipmentSlot, GameMode, ItemStack, ItemTypes, Player, RawMessage, system, Vector3, world } from "@minecraft/server";
+import { placeStructure, spawnMarkersIn } from "./spawns.ts";
 import { advance, CASTLE_REACH_DISTANCE, CASTLE_TRAVEL_DISTANCE, chapterId, CHAPTERS, horizontalDistance } from "./storyline.ts";
 import type { StoryEvent } from "./storyline.ts";
 import { endWinter, isWinterActive, startWinter } from "./winter.ts";
@@ -32,9 +32,16 @@ export function announceChapter(target?: Player): void {
 	}
 }
 
-export function give(player: Player, stack: ItemStack): void {
+/** Gives an item, dropping it at the player's feet if the inventory is full. Returns false for unknown items. */
+export function give(player: Player, typeId: string, amount = 1): boolean {
+	if (!ItemTypes.get(typeId)) {
+		console.warn(`[frozen] unknown item ${typeId}`);
+		return false;
+	}
+	const stack = new ItemStack(typeId, amount);
 	const leftover = player.getComponent("minecraft:inventory")?.container.addItem(stack) ?? stack;
 	if (leftover) player.dimension.spawnItem(leftover, player.location);
+	return true;
 }
 
 export function storyEvent(player: Player, event: StoryEvent): void {
@@ -52,13 +59,13 @@ function completeChapter(id: string, player: Player): void {
 			system.runTimeout(() => elsaFlees(player), 20);
 			break;
 		case "ice_harvester":
-			give(player, new ItemStack("minecraft:carrot", 16));
+			give(player, "minecraft:carrot", 16);
 			break;
 		case "warm_hugs":
 			world.setDynamicProperty(JOURNEY_KEY, player.location);
 			break;
 		case "true_love":
-			give(player, new ItemStack("frozen:snowflake_crystal", 8));
+			give(player, "frozen:snowflake_crystal", 8);
 			break;
 	}
 }
@@ -90,7 +97,7 @@ function raiseCastleAhead(player: Player): void {
 		if (!top) return;
 		const floorY = top.location.y + 1;
 		const origin = { x: cx - CASTLE.half, y: floorY - CASTLE.foundation, z: cz - CASTLE.half };
-		world.structureManager.place(CASTLE.name, player.dimension, origin);
+		placeStructure(CASTLE.name, player.dimension, origin);
 		world.setDynamicProperty(CASTLE_KEY, { x: cx, y: floorY, z: cz });
 		system.runTimeout(() => spawnMarkersIn(player.dimension, origin, CASTLE.size), 2);
 		world.sendMessage({ translate: "frozen.story.castle_appears" });

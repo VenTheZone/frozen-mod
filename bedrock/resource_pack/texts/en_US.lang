@@ -29,6 +29,10 @@ frozen.winter.none=There is no winter to thaw... yet.
 frozen.winter.active=§b❄ Eternal Winter ❄
 
 item.frozen.storybook=Frozen Storybook
+frozen.status.loaded=§b[Frozen]§r Add-on v%s is running.
+frozen.status.building=§b[Frozen]§r Building Arendelle around you... this can take up to a minute on phones.
+frozen.status.built=§b[Frozen]§r Welcome to Arendelle!
+frozen.status.build_failed=§c[Frozen] Arendelle couldn't be built: %s§r Move to open ground, then open the Frozen Storybook and tap "Build Arendelle here".
 action.interact.frozen_talk=Talk
 frozen.kit.welcome=§bWelcome to Arendelle!§r Open the §lFrozen Storybook§r to follow the story. Elsa's Glove: use = ice blast, sneak + use in the air = ice bridge (look up/down for stairs), sneak + use on the ground = ice spikes.
 frozen.storybook.title=Frozen Storybook
