@@ -1,0 +1,22 @@
+# java (Fabric)
+java/.gradle/
+java/build/
+java/run/
+java/logs/
+java/mods/
+java/fabricloader.log
+java/out/
+java/bin/
+
+# bedrock
+bedrock/node_modules/
+bedrock/dist/
+bedrock/behavior_pack/scripts/
+
+# misc
+__pycache__/
+*.pyc
+.idea/
+.vscode/
+*.iml
+.DS_Store
