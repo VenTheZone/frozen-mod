@@ -4,7 +4,7 @@ import { placeStructure, spawnMarkersIn } from "./spawns.ts";
 import { announceChapter, currentChapter, currentChapterKey, give } from "./story.ts";
 import { CHAPTERS } from "./storyline.ts";
 
-const VERSION = "1.2.1";
+const VERSION = "1.2.2";
 /** Scoreboard created by the Frozen World's setup functions; that world builds its own town and kit. */
 export const WORLD_OBJECTIVE = "frozen_world";
 

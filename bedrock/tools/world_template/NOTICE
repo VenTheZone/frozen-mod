@@ -1,0 +1,5 @@
+level.json (the level.dat fields of a flat test world) and db/ (an empty LevelDB skeleton) are
+derived from app/public/data/content/flatcreativegt.mcworld in Mojang's minecraft-creator-tools:
+https://github.com/Mojang/minecraft-creator-tools
+
+Copyright (c) Microsoft Corporation. Licensed under the MIT License.

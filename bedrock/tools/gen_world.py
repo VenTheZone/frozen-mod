@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 """Builds dist/Frozen_World.mcworld: a flat snowy world with the Frozen packs embedded.
 
-The world ships only level.dat (Minecraft generates the terrain, like a world whose db
-folder was deleted). A small world-only behavior pack builds Arendelle and the Ice Castle
-with plain function commands on first load, so it does not depend on the Script API.
+The world ships level.dat plus an empty LevelDB, both taken from Mojang's flat test world in
+minecraft-creator-tools (MIT, see world_template/NOTICE); Minecraft generates the terrain on
+first load. A small world-only behavior pack builds Arendelle and the Ice Castle with plain
+function commands, so it does not depend on the Script API.
 """
 import json
 import os
@@ -17,7 +18,7 @@ import gen_structures as gs  # noqa: E402
 
 ROOT = os.path.normpath(os.path.join(HERE, ".."))
 DIST = os.path.join(ROOT, "dist")
-WORLD_NAME = "Frozen - Kingdom of Arendelle (v1.2.1)"
+WORLD_NAME = "Frozen - Kingdom of Arendelle (v1.2.2)"
 WORLD_BP_UUID = "5b1f7c9e-2d4a-4f3b-9e8c-7a6d5c4b3a21"
 WORLD_BP_MODULE_UUID = "8e2d4c6a-1b3f-4a5e-9c7d-2f4e6a8c0b13"
 WORLD_BP_VERSION = [1, 0, 0]
@@ -93,49 +94,39 @@ def functions(places):
     return {"frozen_world/tick": tick, "frozen_world/build": build}
 
 
+TEMPLATE = os.path.join(HERE, "world_template")
+KINDS = {"byte": gs.Byte, "int": gs.Int, "long": gs.Long, "float": gs.Float, "string": gs.String}
+TAGS = {gs.Byte: gs.TAG_BYTE, gs.Int: gs.TAG_INT, gs.Long: gs.TAG_LONG, gs.Float: gs.TAG_FLOAT, gs.String: gs.TAG_STRING}
+
+
+def decode(entry):
+    kind, value = entry
+    if kind == "compound":
+        return {k: decode(v) for k, v in value.items()}
+    if kind == "list":
+        items = [decode(v) for v in value]
+        tag = gs.TAG_COMPOUND if items and isinstance(items[0], dict) else TAGS.get(type(items[0]), gs.TAG_END) if items else gs.TAG_END
+        return gs.NbtList(tag, items)
+    return KINDS[kind](value)
+
+
 def level_dat():
-    now = int(time.time())
-    version = [gs.Int(v) for v in (1, 21, 90, 0, 0)]
-    b = lambda v: gs.Byte(1 if v else 0)  # noqa: E731
-    data = {
+    """Mojang's flat test world level.dat (every field and type as the game wrote it) with Frozen overrides."""
+    data = {k: decode(v) for k, v in json.load(open(os.path.join(TEMPLATE, "level.json"))).items()}
+    data.update({
         "LevelName": gs.String(WORLD_NAME),
-        "StorageVersion": gs.Int(10), "NetworkVersion": gs.Int(685), "WorldVersion": gs.Int(1),
-        "InventoryVersion": gs.String("1.21.0"),
-        "lastOpenedWithVersion": gs.NbtList(gs.TAG_INT, version),
-        "MinimumCompatibleClientVersion": gs.NbtList(gs.TAG_INT, version),
-        "baseGameVersion": gs.String("*"),
-        "Generator": gs.Int(2), "FlatWorldLayers": gs.String(json.dumps(FLAT_LAYERS, separators=(",", ":"))),
-        "RandomSeed": gs.Long(1225), "SpawnX": gs.Int(SPAWN[0]), "SpawnY": gs.Int(SPAWN[1]), "SpawnZ": gs.Int(SPAWN[2]),
-        "GameType": gs.Int(0), "Difficulty": gs.Int(2), "ForceGameType": b(False),
-        "LastPlayed": gs.Long(now), "Time": gs.Long(1000), "currentTick": gs.Long(0), "worldStartCount": gs.Long(0),
-        "commandsEnabled": b(False), "cheatsEnabled": b(False), "hasBeenLoadedInCreative": b(False),
-        "commandblocksenabled": b(True), "commandblockoutput": b(True), "sendcommandfeedback": b(True),
-        "functioncommandlimit": gs.Int(10000), "maxcommandchainlength": gs.Int(65535),
-        "MultiplayerGame": b(True), "MultiplayerGameIntent": b(True), "LANBroadcast": b(True), "LANBroadcastIntent": b(True),
-        "XBLBroadcastIntent": gs.Int(3), "PlatformBroadcastIntent": gs.Int(3), "Platform": gs.Int(2),
-        "dodaylightcycle": b(True), "doweathercycle": b(True), "domobspawning": b(True), "spawnMobs": b(True),
-        "doentitydrops": b(True), "dofiretick": b(True), "doinsomnia": b(True), "domobloot": b(True), "dotiledrops": b(True),
-        "drowningdamage": b(True), "falldamage": b(True), "firedamage": b(True), "freezedamage": b(True),
-        "keepinventory": b(False), "mobgriefing": b(True), "naturalregeneration": b(True), "pvp": b(True),
-        "showcoordinates": b(True), "showdeathmessages": b(True), "showtags": b(True), "tntexplodes": b(True),
-        "respawnblocksexplode": b(True), "showbordereffect": b(True), "randomtickspeed": gs.Int(1), "spawnradius": gs.Int(0),
-        "serverChunkTickRange": gs.Int(6), "NetherScale": gs.Int(8), "playerssleepingpercentage": gs.Int(100),
-        "rainLevel": gs.Float(0.0), "rainTime": gs.Int(12000), "lightningLevel": gs.Float(0.0), "lightningTime": gs.Int(12000),
-        "texturePacksRequired": b(False), "bonusChestEnabled": b(False), "startWithMapEnabled": b(False),
-        "isFromWorldTemplate": b(False), "isWorldTemplateOptionLocked": b(False), "educationFeaturesEnabled": b(False),
-        "experiments": {}, "world_policies": {},
-        "abilities": {
-            "attackmobs": b(True), "attackplayers": b(True), "build": b(True), "mine": b(True), "doorsandswitches": b(True),
-            "opencontainers": b(True), "teleport": b(False), "flying": b(False), "mayfly": b(False), "instabuild": b(False),
-            "invulnerable": b(False), "lightning": b(False), "op": b(False),
-            "flySpeed": gs.Float(0.05), "walkSpeed": gs.Float(0.1), "verticalFlySpeed": gs.Float(1.0),
-            "permissionsLevel": gs.Int(0), "playerPermissionsLevel": gs.Int(1),
-        },
-    }
+        "FlatWorldLayers": gs.String(json.dumps(FLAT_LAYERS, separators=(",", ":"))),
+        "SpawnX": gs.Int(SPAWN[0]), "SpawnY": gs.Int(SPAWN[1]), "SpawnZ": gs.Int(SPAWN[2]),
+        "RandomSeed": gs.Long(1225),
+        "GameType": gs.Int(0), "Difficulty": gs.Int(2),
+        "commandsEnabled": gs.Byte(0), "hasBeenLoadedInCreative": gs.Byte(0),
+        "experiments": {},
+        "LastPlayed": gs.Long(int(time.time())), "Time": gs.Long(1000), "currentTick": gs.Long(0),
+        "worldStartCount": gs.Long(0),
+    })
     body = bytearray()
     gs.write_named(body, "", data)
-    header = gs.struct.pack("<ii", 10, len(body))
-    return header + bytes(body)
+    return gs.struct.pack("<ii", int(data["StorageVersion"]), len(body)) + bytes(body)
 
 
 def pack_version(folder):
@@ -153,7 +144,7 @@ def main():
     world_manifest = {
         "format_version": 2,
         "header": {
-            "name": "Frozen v1.2.1 - World Setup",
+            "name": "Frozen v1.2.2 - World Setup",
             "description": "Builds Arendelle and the Ice Castle when this world first loads.",
             "uuid": WORLD_BP_UUID, "version": WORLD_BP_VERSION, "min_engine_version": [1, 21, 90],
         },
@@ -166,11 +157,16 @@ def main():
     os.makedirs(DIST, exist_ok=True)
     out_path = os.path.join(DIST, "Frozen_World.mcworld")
     with zipfile.ZipFile(out_path, "w", zipfile.ZIP_DEFLATED) as zf:
-        zf.writestr("level.dat", level_dat())
+        level = level_dat()
+        zf.writestr("level.dat", level)
+        zf.writestr("level.dat_old", level)
         zf.writestr("levelname.txt", WORLD_NAME)
         zf.writestr("world_behavior_packs.json", json.dumps(world_bps, indent=2))
         zf.writestr("world_resource_packs.json", json.dumps(world_rps, indent=2))
-        zf.writestr(zipfile.ZipInfo("db/"), "")
+        # A freshly created, empty LevelDB exactly as the game writes it; terrain is generated on first load.
+        for name in ("CURRENT", "MANIFEST-000002"):
+            zf.write(os.path.join(TEMPLATE, "db", name), f"db/{name}")
+        zf.writestr("db/000003.log", b"")
         world_bp = "behavior_packs/Frozen_World_BP/"
         zf.writestr(world_bp + "manifest.json", json.dumps(world_manifest, indent=2))
         zf.write(os.path.join(ROOT, "behavior_pack", "pack_icon.png"), world_bp + "pack_icon.png")
@@ -196,8 +192,10 @@ def verify(path, places):
         names = set(zf.namelist())
         raw = zf.read("level.dat")
         version, length = gs.struct.unpack_from("<ii", raw)
-        assert version == 10 and length == len(raw) - 8, "level.dat header"
         data = validate.read_nbt(raw[8:])
+        assert version == data["StorageVersion"] and length == len(raw) - 8, "level.dat header"
+        assert data["experiments"] == {}, "no experiments may be enabled"
+        assert zf.read("db/CURRENT") == b"MANIFEST-000002\n"
         assert data["Generator"] == 2 and json.loads(data["FlatWorldLayers"])["block_layers"], "flat world"
         assert data["SpawnY"] == FLOOR_Y + 1
         build = zf.read("behavior_packs/Frozen_World_BP/functions/frozen_world/build.mcfunction").decode()

@@ -1,0 +1,506 @@
+{
+ "BiomeOverride": [
+  "string",
+  ""
+ ],
+ "CenterMapsToOrigin": [
+  "byte",
+  0
+ ],
+ "ConfirmedPlatformLockedContent": [
+  "byte",
+  0
+ ],
+ "Difficulty": [
+  "int",
+  0
+ ],
+ "FlatWorldLayers": [
+  "string",
+  "{\"biome_id\":1,\"block_layers\":[{\"block_name\":\"minecraft:bedrock\",\"count\":1},{\"block_name\":\"minecraft:dirt\",\"count\":2},{\"block_name\":\"minecraft:grass\",\"count\":1}],\"encoding_version\":6,\"structure_options\":null,\"world_version\":\"version.post_1_18\"}\n"
+ ],
+ "ForceGameType": [
+  "byte",
+  0
+ ],
+ "GameType": [
+  "int",
+  1
+ ],
+ "Generator": [
+  "int",
+  2
+ ],
+ "InventoryVersion": [
+  "string",
+  "1.19.22"
+ ],
+ "LANBroadcast": [
+  "byte",
+  1
+ ],
+ "LANBroadcastIntent": [
+  "byte",
+  1
+ ],
+ "LastPlayed": [
+  "long",
+  1662220311
+ ],
+ "LevelName": [
+  "string",
+  "flatcreativegt"
+ ],
+ "LimitedWorldOriginX": [
+  "int",
+  0
+ ],
+ "LimitedWorldOriginY": [
+  "int",
+  32767
+ ],
+ "LimitedWorldOriginZ": [
+  "int",
+  0
+ ],
+ "MinimumCompatibleClientVersion": [
+  "list",
+  [
+   [
+    "int",
+    1
+   ],
+   [
+    "int",
+    19
+   ],
+   [
+    "int",
+    20
+   ],
+   [
+    "int",
+    0
+   ],
+   [
+    "int",
+    0
+   ]
+  ]
+ ],
+ "MultiplayerGame": [
+  "byte",
+  1
+ ],
+ "MultiplayerGameIntent": [
+  "byte",
+  1
+ ],
+ "NetherScale": [
+  "int",
+  8
+ ],
+ "NetworkVersion": [
+  "int",
+  545
+ ],
+ "Platform": [
+  "int",
+  2
+ ],
+ "PlatformBroadcastIntent": [
+  "int",
+  2
+ ],
+ "RandomSeed": [
+  "long",
+  -3025905974105939481
+ ],
+ "SpawnV1Villagers": [
+  "byte",
+  0
+ ],
+ "SpawnX": [
+  "int",
+  0
+ ],
+ "SpawnY": [
+  "int",
+  32767
+ ],
+ "SpawnZ": [
+  "int",
+  0
+ ],
+ "StorageVersion": [
+  "int",
+  9
+ ],
+ "Time": [
+  "long",
+  129
+ ],
+ "WorldVersion": [
+  "int",
+  1
+ ],
+ "XBLBroadcastIntent": [
+  "int",
+  2
+ ],
+ "abilities": [
+  "compound",
+  {
+   "attackmobs": [
+    "byte",
+    1
+   ],
+   "attackplayers": [
+    "byte",
+    1
+   ],
+   "build": [
+    "byte",
+    1
+   ],
+   "doorsandswitches": [
+    "byte",
+    1
+   ],
+   "flySpeed": [
+    "float",
+    0.05000000074505806
+   ],
+   "flying": [
+    "byte",
+    0
+   ],
+   "instabuild": [
+    "byte",
+    0
+   ],
+   "invulnerable": [
+    "byte",
+    0
+   ],
+   "lightning": [
+    "byte",
+    0
+   ],
+   "mayfly": [
+    "byte",
+    0
+   ],
+   "mine": [
+    "byte",
+    1
+   ],
+   "op": [
+    "byte",
+    0
+   ],
+   "opencontainers": [
+    "byte",
+    1
+   ],
+   "teleport": [
+    "byte",
+    0
+   ],
+   "walkSpeed": [
+    "float",
+    0.10000000149011612
+   ]
+  }
+ ],
+ "baseGameVersion": [
+  "string",
+  "*"
+ ],
+ "bonusChestEnabled": [
+  "byte",
+  0
+ ],
+ "bonusChestSpawned": [
+  "byte",
+  0
+ ],
+ "commandblockoutput": [
+  "byte",
+  1
+ ],
+ "commandblocksenabled": [
+  "byte",
+  1
+ ],
+ "commandsEnabled": [
+  "byte",
+  1
+ ],
+ "currentTick": [
+  "long",
+  129
+ ],
+ "dodaylightcycle": [
+  "byte",
+  1
+ ],
+ "doentitydrops": [
+  "byte",
+  1
+ ],
+ "dofiretick": [
+  "byte",
+  1
+ ],
+ "doimmediaterespawn": [
+  "byte",
+  0
+ ],
+ "doinsomnia": [
+  "byte",
+  1
+ ],
+ "domobloot": [
+  "byte",
+  1
+ ],
+ "domobspawning": [
+  "byte",
+  1
+ ],
+ "dotiledrops": [
+  "byte",
+  1
+ ],
+ "doweathercycle": [
+  "byte",
+  1
+ ],
+ "drowningdamage": [
+  "byte",
+  1
+ ],
+ "eduOffer": [
+  "int",
+  0
+ ],
+ "educationFeaturesEnabled": [
+  "byte",
+  0
+ ],
+ "experiments": [
+  "compound",
+  {
+   "experiments_ever_used": [
+    "byte",
+    1
+   ],
+   "gametest": [
+    "byte",
+    1
+   ],
+   "saved_with_toggled_experiments": [
+    "byte",
+    1
+   ]
+  }
+ ],
+ "falldamage": [
+  "byte",
+  1
+ ],
+ "firedamage": [
+  "byte",
+  1
+ ],
+ "freezedamage": [
+  "byte",
+  1
+ ],
+ "functioncommandlimit": [
+  "int",
+  10000
+ ],
+ "hasBeenLoadedInCreative": [
+  "byte",
+  1
+ ],
+ "hasLockedBehaviorPack": [
+  "byte",
+  0
+ ],
+ "hasLockedResourcePack": [
+  "byte",
+  0
+ ],
+ "immutableWorld": [
+  "byte",
+  0
+ ],
+ "isFromLockedTemplate": [
+  "byte",
+  0
+ ],
+ "isFromWorldTemplate": [
+  "byte",
+  0
+ ],
+ "isSingleUseWorld": [
+  "byte",
+  0
+ ],
+ "isWorldTemplateOptionLocked": [
+  "byte",
+  0
+ ],
+ "keepinventory": [
+  "byte",
+  0
+ ],
+ "lastOpenedWithVersion": [
+  "list",
+  [
+   [
+    "int",
+    1
+   ],
+   [
+    "int",
+    19
+   ],
+   [
+    "int",
+    22
+   ],
+   [
+    "int",
+    1
+   ],
+   [
+    "int",
+    0
+   ]
+  ]
+ ],
+ "lightningLevel": [
+  "float",
+  0.0
+ ],
+ "lightningTime": [
+  "int",
+  124600
+ ],
+ "limitedWorldDepth": [
+  "int",
+  16
+ ],
+ "limitedWorldWidth": [
+  "int",
+  16
+ ],
+ "maxcommandchainlength": [
+  "int",
+  65535
+ ],
+ "mobgriefing": [
+  "byte",
+  1
+ ],
+ "naturalregeneration": [
+  "byte",
+  1
+ ],
+ "permissionsLevel": [
+  "int",
+  0
+ ],
+ "playerPermissionsLevel": [
+  "int",
+  1
+ ],
+ "prid": [
+  "string",
+  ""
+ ],
+ "pvp": [
+  "byte",
+  1
+ ],
+ "rainLevel": [
+  "float",
+  0.0
+ ],
+ "rainTime": [
+  "int",
+  94841
+ ],
+ "randomtickspeed": [
+  "int",
+  1
+ ],
+ "requiresCopiedPackRemovalCheck": [
+  "byte",
+  0
+ ],
+ "respawnblocksexplode": [
+  "byte",
+  1
+ ],
+ "sendcommandfeedback": [
+  "byte",
+  1
+ ],
+ "serverChunkTickRange": [
+  "int",
+  4
+ ],
+ "showbordereffect": [
+  "byte",
+  1
+ ],
+ "showcoordinates": [
+  "byte",
+  0
+ ],
+ "showdeathmessages": [
+  "byte",
+  1
+ ],
+ "showtags": [
+  "byte",
+  1
+ ],
+ "spawnMobs": [
+  "byte",
+  1
+ ],
+ "spawnradius": [
+  "int",
+  5
+ ],
+ "startWithMapEnabled": [
+  "byte",
+  0
+ ],
+ "texturePacksRequired": [
+  "byte",
+  0
+ ],
+ "tntexplodes": [
+  "byte",
+  1
+ ],
+ "useMsaGamertagsOnly": [
+  "byte",
+  0
+ ],
+ "worldStartCount": [
+  "long",
+  4294967294
+ ],
+ "world_policies": [
+  "compound",
+  {}
+ ]
+}
