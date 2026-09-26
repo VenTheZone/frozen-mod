@@ -1,0 +1,15 @@
+{
+	"format_version": "1.20.10",
+	"minecraft:recipe_shaped": {
+		"description": { "identifier": "frozen:elsa_glove" },
+		"tags": ["crafting_table"],
+		"pattern": [" C ", "CLC", " B "],
+		"key": {
+			"C": { "item": "frozen:snowflake_crystal" },
+			"L": { "item": "minecraft:leather" },
+			"B": { "item": "minecraft:blue_ice" }
+		},
+		"unlock": [{ "item": "frozen:snowflake_crystal" }],
+		"result": { "item": "frozen:elsa_glove" }
+	}
+}

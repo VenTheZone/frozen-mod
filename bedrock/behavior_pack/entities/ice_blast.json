@@ -1,0 +1,40 @@
+{
+	"format_version": "1.21.90",
+	"minecraft:entity": {
+		"description": {
+			"identifier": "frozen:ice_blast",
+			"is_spawnable": false,
+			"is_summonable": true
+		},
+		"components": {
+			"minecraft:collision_box": { "width": 0.25, "height": 0.25 },
+			"minecraft:projectile": {
+				"anchor": "eye_height",
+				"offset": [0, -0.1, 0],
+				"power": 1.6,
+				"gravity": 0.005,
+				"on_hit": {
+					"impact_damage": { "damage": 4, "knockback": true },
+					"mob_effect": {
+						"effect": "slowness",
+						"duration": 100,
+						"durationeasy": 60,
+						"durationnormal": 100,
+						"durationhard": 140,
+						"amplifier": 1
+					},
+					"particle_on_hit": {
+						"particle_type": "snowballpoof",
+						"num_particles": 8,
+						"on_entity_hit": true,
+						"on_other_hit": true
+					},
+					"remove_on_hit": {}
+				}
+			},
+			"minecraft:physics": {},
+			"minecraft:pushable": { "is_pushable": false, "is_pushable_by_piston": true },
+			"minecraft:conditional_bandwidth_optimization": {}
+		}
+	}
+}

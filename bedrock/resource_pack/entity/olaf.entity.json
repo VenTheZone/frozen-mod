@@ -1,0 +1,18 @@
+{
+	"format_version": "1.10.0",
+	"minecraft:client_entity": {
+		"description": {
+			"identifier": "frozen:olaf",
+			"materials": { "default": "entity_alphatest" },
+			"textures": { "default": "textures/entity/olaf" },
+			"geometry": { "default": "geometry.snowgolem.v1.8" },
+			"animations": {
+				"move": "animation.snowgolem.move.v1.8",
+				"look_at_target": "animation.common.look_at_target"
+			},
+			"animation_controllers": [{ "move": "controller.animation.snowgolem.move.v1.8" }],
+			"render_controllers": ["controller.render.default"],
+			"spawn_egg": { "base_color": "#f5f8fc", "overlay_color": "#f0821e" }
+		}
+	}
+}

@@ -1,0 +1,18 @@
+{
+	"compilerOptions": {
+		"target": "ES2021",
+		"module": "ES2020",
+		"moduleResolution": "bundler",
+		"lib": ["ES2021"],
+		"strict": true,
+		"noUnusedLocals": true,
+		"noUnusedParameters": true,
+		"rewriteRelativeImportExtensions": true,
+		"rootDir": "src",
+		"outDir": "behavior_pack/scripts",
+		"skipLibCheck": true,
+		"types": []
+	},
+	"include": ["src/**/*.ts"],
+	"exclude": ["src/**/*.test.ts"]
+}

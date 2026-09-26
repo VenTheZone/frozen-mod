@@ -1,0 +1,32 @@
+{
+	"format_version": "1.13.0",
+	"minecraft:feature_rules": {
+		"description": {
+			"identifier": "frozen:arendelle_rule",
+			"places_feature": "frozen:arendelle_feature"
+		},
+		"conditions": {
+			"placement_pass": "surface_pass",
+			"minecraft:biome_filter": [
+				{
+					"any_of": [
+						{ "test": "has_biome_tag", "value": "ice_plains" },
+						{
+							"all_of": [
+								{ "test": "has_biome_tag", "value": "cold" },
+								{ "test": "has_biome_tag", "value": "taiga" }
+							]
+						}
+					]
+				}
+			]
+		},
+		"distribution": {
+			"iterations": 1,
+			"scatter_chance": { "numerator": 1, "denominator": 200 },
+			"x": { "distribution": "uniform", "extent": [0, 15] },
+			"y": "q.heightmap(v.worldx, v.worldz) - 3",
+			"z": { "distribution": "uniform", "extent": [0, 15] }
+		}
+	}
+}

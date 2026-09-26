@@ -1,0 +1,15 @@
+{
+	"format_version": "1.20.10",
+	"minecraft:recipe_shaped": {
+		"description": { "identifier": "frozen:ice_sword" },
+		"tags": ["crafting_table"],
+		"pattern": ["C", "B", "S"],
+		"key": {
+			"C": { "item": "frozen:snowflake_crystal" },
+			"B": { "item": "minecraft:blue_ice" },
+			"S": { "item": "minecraft:stick" }
+		},
+		"unlock": [{ "item": "frozen:snowflake_crystal" }],
+		"result": { "item": "frozen:ice_sword" }
+	}
+}

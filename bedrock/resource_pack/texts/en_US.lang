@@ -1,0 +1,29 @@
+item.frozen.snowflake_crystal=Snowflake Crystal
+item.frozen.true_love_heart=Act of True Love
+item.frozen.elsa_glove=Elsa's Glove
+item.frozen.ice_sword=Ice Sword
+item.frozen.ice_helmet=Ice Crown
+item.frozen.ice_chestplate=Ice Gown
+item.frozen.ice_leggings=Ice Leggings
+item.frozen.ice_boots=Ice Slippers
+tile.frozen.magic_ice=Magic Ice
+tile.frozen.spawn_marker=Frozen Spawn Marker
+
+entity.frozen:elsa.name=Elsa
+entity.frozen:anna.name=Anna
+entity.frozen:kristoff.name=Kristoff
+entity.frozen:olaf.name=Olaf
+entity.frozen:sven.name=Sven
+entity.frozen:marshmallow.name=Marshmallow
+entity.frozen:ice_blast.name=Ice Blast
+item.spawn_egg.entity.frozen:elsa.name=Spawn Elsa
+item.spawn_egg.entity.frozen:anna.name=Spawn Anna
+item.spawn_egg.entity.frozen:kristoff.name=Spawn Kristoff
+item.spawn_egg.entity.frozen:olaf.name=Spawn Olaf
+item.spawn_egg.entity.frozen:sven.name=Spawn Sven
+item.spawn_egg.entity.frozen:marshmallow.name=Spawn Marshmallow
+
+frozen.winter.start=§bElsa's fear has plunged the world into an Eternal Winter! Only an act of true love can thaw a frozen heart.
+frozen.winter.end=§6An act of true love has thawed the Eternal Winter. Summer returns!
+frozen.winter.none=There is no winter to thaw... yet.
+frozen.winter.active=§b❄ Eternal Winter ❄

@@ -1,0 +1,5 @@
+{
+	"format_version": "1.21.40",
+	"frozen:magic_ice": { "sound": "glass" },
+	"frozen:spawn_marker": { "sound": "stone" }
+}

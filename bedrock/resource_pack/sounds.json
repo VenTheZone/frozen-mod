@@ -1,0 +1,40 @@
+{
+	"entity_sounds": {
+		"entities": {
+			"frozen:olaf": {
+				"volume": 1.0,
+				"pitch": [0.9, 1.2],
+				"events": {
+					"hurt": "mob.snowgolem.hurt",
+					"death": "mob.snowgolem.death"
+				}
+			},
+			"frozen:sven": {
+				"volume": 1.0,
+				"pitch": [0.8, 1.0],
+				"events": {
+					"ambient": "mob.horse.idle",
+					"hurt": "mob.horse.hit",
+					"death": "mob.horse.death",
+					"eat": "mob.horse.eat",
+					"mad": "mob.horse.angry",
+					"saddle": "mob.horse.leather"
+				}
+			},
+			"frozen:marshmallow": {
+				"volume": 1.5,
+				"pitch": [0.5, 0.7],
+				"events": {
+					"hurt": "mob.snowgolem.hurt",
+					"death": "mob.snowgolem.death",
+					"throw": "mob.irongolem.throw",
+					"shoot": "mob.snowgolem.shoot",
+					"step": "step.snow"
+				}
+			},
+			"frozen:elsa": {
+				"events": { "shoot": "mob.snowgolem.shoot" }
+			}
+		}
+	}
+}

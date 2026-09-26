@@ -1,0 +1,29 @@
+{
+	"tiers": [
+		{
+			"trades": [
+				{
+					"wants": [
+						{ "item": "minecraft:emerald", "quantity": 16 },
+						{ "item": "minecraft:leather", "quantity": 1 }
+					],
+					"gives": [{ "item": "frozen:elsa_glove", "quantity": 1 }],
+					"max_uses": 999,
+					"trader_exp": 10
+				},
+				{
+					"wants": [{ "item": "minecraft:emerald", "quantity": 6 }],
+					"gives": [{ "item": "frozen:snowflake_crystal", "quantity": 1 }],
+					"max_uses": 999,
+					"trader_exp": 5
+				},
+				{
+					"wants": [{ "item": "minecraft:packed_ice", "quantity": 16 }],
+					"gives": [{ "item": "minecraft:emerald", "quantity": 1 }],
+					"max_uses": 999,
+					"trader_exp": 2
+				}
+			]
+		}
+	]
+}

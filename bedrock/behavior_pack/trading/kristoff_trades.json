@@ -1,0 +1,32 @@
+{
+	"tiers": [
+		{
+			"trades": [
+				{
+					"wants": [{ "item": "minecraft:emerald", "quantity": 1 }],
+					"gives": [{ "item": "minecraft:packed_ice", "quantity": 8 }],
+					"max_uses": 999,
+					"trader_exp": 2
+				},
+				{
+					"wants": [{ "item": "minecraft:emerald", "quantity": 3 }],
+					"gives": [{ "item": "minecraft:blue_ice", "quantity": 4 }],
+					"max_uses": 999,
+					"trader_exp": 3
+				},
+				{
+					"wants": [{ "item": "minecraft:carrot", "quantity": 12 }],
+					"gives": [{ "item": "minecraft:emerald", "quantity": 1 }],
+					"max_uses": 999,
+					"trader_exp": 2
+				},
+				{
+					"wants": [{ "item": "minecraft:emerald", "quantity": 6 }],
+					"gives": [{ "item": "minecraft:saddle", "quantity": 1 }],
+					"max_uses": 999,
+					"trader_exp": 5
+				}
+			]
+		}
+	]
+}

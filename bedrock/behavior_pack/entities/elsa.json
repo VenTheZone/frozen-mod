@@ -1,0 +1,44 @@
+{
+	"format_version": "1.21.90",
+	"minecraft:entity": {
+		"description": {
+			"identifier": "frozen:elsa",
+			"is_spawnable": true,
+			"is_summonable": true
+		},
+		"components": {
+			"minecraft:type_family": { "family": ["frozen_royal", "elsa", "mob"] },
+			"minecraft:health": { "value": 40, "max": 40 },
+			"minecraft:collision_box": { "width": 0.6, "height": 1.95 },
+			"minecraft:movement": { "value": 0.5 },
+			"minecraft:navigation.walk": { "avoid_water": true, "can_open_doors": true },
+			"minecraft:movement.basic": {},
+			"minecraft:jump.static": {},
+			"minecraft:can_climb": {},
+			"minecraft:physics": {},
+			"minecraft:pushable": { "is_pushable": true, "is_pushable_by_piston": true },
+			"minecraft:breathable": { "total_supply": 15, "suffocate_time": 0 },
+			"minecraft:nameable": {},
+			"minecraft:persistent": {},
+			"minecraft:economy_trade_table": {
+				"display_name": "entity.frozen:elsa.name",
+				"table": "trading/elsa_trades.json",
+				"new_screen": true,
+				"persist_trades": true
+			},
+			"minecraft:shooter": { "def": "frozen:ice_blast" },
+			"minecraft:behavior.float": { "priority": 0 },
+			"minecraft:behavior.trade_with_player": { "priority": 1 },
+			"minecraft:behavior.hurt_by_target": { "priority": 1 },
+			"minecraft:behavior.ranged_attack": {
+				"priority": 2,
+				"attack_interval_min": 1.5,
+				"attack_interval_max": 2.0,
+				"attack_radius": 12
+			},
+			"minecraft:behavior.random_stroll": { "priority": 8, "speed_multiplier": 0.6 },
+			"minecraft:behavior.look_at_player": { "priority": 9, "look_distance": 6, "probability": 0.02 },
+			"minecraft:behavior.random_look_around": { "priority": 10 }
+		}
+	}
+}

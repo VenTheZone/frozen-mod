@@ -1,0 +1,16 @@
+{
+	"pools": [
+		{
+			"rolls": { "min": 3, "max": 6 },
+			"entries": [
+				{ "type": "item", "name": "minecraft:bread", "weight": 15, "functions": [{ "function": "set_count", "count": { "min": 2, "max": 5 } }] },
+				{ "type": "item", "name": "minecraft:carrot", "weight": 15, "functions": [{ "function": "set_count", "count": { "min": 3, "max": 8 } }] },
+				{ "type": "item", "name": "minecraft:cookie", "weight": 10, "functions": [{ "function": "set_count", "count": { "min": 2, "max": 6 } }] },
+				{ "type": "item", "name": "minecraft:emerald", "weight": 10, "functions": [{ "function": "set_count", "count": { "min": 1, "max": 5 } }] },
+				{ "type": "item", "name": "minecraft:poppy", "weight": 8 },
+				{ "type": "item", "name": "minecraft:saddle", "weight": 3 },
+				{ "type": "item", "name": "frozen:true_love_heart", "weight": 1 }
+			]
+		}
+	]
+}

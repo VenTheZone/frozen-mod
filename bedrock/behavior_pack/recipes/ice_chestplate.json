@@ -1,0 +1,14 @@
+{
+	"format_version": "1.20.10",
+	"minecraft:recipe_shaped": {
+		"description": { "identifier": "frozen:ice_chestplate" },
+		"tags": ["crafting_table"],
+		"pattern": ["BCB", "BBB", "BBB"],
+		"key": {
+			"C": { "item": "frozen:snowflake_crystal" },
+			"B": { "item": "minecraft:blue_ice" }
+		},
+		"unlock": [{ "item": "frozen:snowflake_crystal" }],
+		"result": { "item": "frozen:ice_chestplate" }
+	}
+}

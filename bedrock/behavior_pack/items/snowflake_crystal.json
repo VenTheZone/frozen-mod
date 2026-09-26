@@ -1,0 +1,15 @@
+{
+	"format_version": "1.21.90",
+	"minecraft:item": {
+		"description": {
+			"identifier": "frozen:snowflake_crystal",
+			"menu_category": { "category": "items" }
+		},
+		"components": {
+			"minecraft:icon": "frozen_snowflake_crystal",
+			"minecraft:display_name": { "value": "item.frozen.snowflake_crystal" },
+			"minecraft:rarity": "uncommon",
+			"minecraft:max_stack_size": 64
+		}
+	}
+}

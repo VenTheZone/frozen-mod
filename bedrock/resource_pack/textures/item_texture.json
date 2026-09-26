@@ -1,0 +1,14 @@
+{
+	"resource_pack_name": "frozen",
+	"texture_name": "atlas.items",
+	"texture_data": {
+		"frozen_snowflake_crystal": { "textures": "textures/item/snowflake_crystal" },
+		"frozen_true_love_heart": { "textures": "textures/item/true_love_heart" },
+		"frozen_elsa_glove": { "textures": "textures/item/elsa_glove" },
+		"frozen_ice_sword": { "textures": "textures/item/ice_sword" },
+		"frozen_ice_helmet": { "textures": "textures/item/ice_helmet" },
+		"frozen_ice_chestplate": { "textures": "textures/item/ice_chestplate" },
+		"frozen_ice_leggings": { "textures": "textures/item/ice_leggings" },
+		"frozen_ice_boots": { "textures": "textures/item/ice_boots" }
+	}
+}
