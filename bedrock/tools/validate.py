@@ -55,6 +55,8 @@ def read_nbt(data):
     def payload(tag):
         if tag == 1: return take("b")
         if tag == 3: return take("i")
+        if tag == 4: return take("q")
+        if tag == 5: return take("f")
         if tag == 8: return string()
         if tag == 9:
             inner, n = take("b"), take("i")

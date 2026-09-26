@@ -4,7 +4,15 @@ A *Frozen*-themed add-on for **Minecraft Bedrock Edition**, the version on phone
 
 > Unofficial fan project. Not affiliated with or endorsed by Disney or Mojang/Microsoft.
 
-## Install (phone or tablet)
+## Easiest: download the Frozen World
+
+1. Download **`Frozen_World.mcworld`** from the [latest release](https://github.com/VenTheZone/frozen-mod/releases/latest) and open it with Minecraft. The packs are included and turned on automatically.
+2. Open the world **"Frozen - Kingdom of Arendelle"** from your worlds list.
+3. Within about 5 seconds, Arendelle is built around you: Anna, Elsa, Kristoff, Sven and Olaf are in town. Elsa's Ice Castle stands 70 blocks north, guarded by Marshmallow. You get a starter kit too.
+
+It's a flat, snowy survival world. The town is built by plain function commands, so it works even without the scripting features.
+
+## Install as an add-on (phone or tablet)
 
 1. Download **`Frozen.mcaddon`** from the [latest release](https://github.com/VenTheZone/frozen-mod/releases/latest).
 2. Open the file:

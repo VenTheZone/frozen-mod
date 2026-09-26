@@ -106,8 +106,16 @@ function raiseCastleAhead(player: Player): void {
 	}
 }
 
+/** The Frozen World's setup functions record where they built the Ice Castle. */
+function worldCastle(): Vector3 | undefined {
+	const scores = world.scoreboard.getObjective("frozen_world");
+	const x = scores?.getScore("castle_x");
+	const z = scores?.getScore("castle_z");
+	return x === undefined || z === undefined ? undefined : { x, y: 0, z };
+}
+
 function journeyToCastle(player: Player): void {
-	const castle = world.getDynamicProperty(CASTLE_KEY) as Vector3 | undefined;
+	const castle = worldCastle() ?? (world.getDynamicProperty(CASTLE_KEY) as Vector3 | undefined);
 	if (castle) {
 		if (horizontalDistance(player.location, castle) <= CASTLE_REACH_DISTANCE) storyEvent(player, { kind: "reach_castle" });
 		return;

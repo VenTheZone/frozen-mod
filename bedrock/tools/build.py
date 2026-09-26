@@ -33,6 +33,7 @@ def main():
                     full = os.path.join(dirpath, f)
                     zf.write(full, os.path.join(name, os.path.relpath(full, base)))
     print(f"built {os.path.relpath(out, ROOT)} ({os.path.getsize(out) // 1024} KB)")
+    run(sys.executable, os.path.join(HERE, "gen_world.py"))
 
 
 if __name__ == "__main__":

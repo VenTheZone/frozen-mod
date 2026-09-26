@@ -17,17 +17,21 @@ BLOCK_VERSION = (1 << 24) | (21 << 16) | (90 << 8)  # 1.21.90
 
 class Byte(int): pass
 class Int(int): pass
+class Long(int): pass
+class Float(float): pass
 class String(str): pass
 
 class NbtList:
     def __init__(self, tag, items):
         self.tag, self.items = tag, list(items)
 
-TAG_END, TAG_BYTE, TAG_INT, TAG_STRING, TAG_LIST, TAG_COMPOUND = 0, 1, 3, 8, 9, 10
+TAG_END, TAG_BYTE, TAG_INT, TAG_LONG, TAG_FLOAT, TAG_STRING, TAG_LIST, TAG_COMPOUND = 0, 1, 3, 4, 5, 8, 9, 10
 
 
 def tag_of(value):
     if isinstance(value, Byte): return TAG_BYTE
+    if isinstance(value, Long): return TAG_LONG
+    if isinstance(value, Float): return TAG_FLOAT
     if isinstance(value, (Int, int)) and not isinstance(value, bool): return TAG_INT
     if isinstance(value, str): return TAG_STRING
     if isinstance(value, NbtList): return TAG_LIST
@@ -39,6 +43,10 @@ def write_payload(out, value):
     t = tag_of(value)
     if t == TAG_BYTE:
         out += struct.pack("<b", value)
+    elif t == TAG_LONG:
+        out += struct.pack("<q", value)
+    elif t == TAG_FLOAT:
+        out += struct.pack("<f", value)
     elif t == TAG_INT:
         out += struct.pack("<i", value)
     elif t == TAG_STRING:
@@ -71,11 +79,13 @@ def block(name, **states):
 
 
 class Structure:
-    def __init__(self, width, height, depth, foundation):
+    def __init__(self, width, height, depth, foundation, with_markers=True):
         self.size = (width, height + foundation, depth)
         self.base = foundation
         self.cells = {}
         self.containers = {}
+        self.with_markers = with_markers
+        self.markers = []  # (x, y, z, character) in local floor coordinates
 
     def set(self, x, y, z, b):
         y += self.base
@@ -106,7 +116,9 @@ class Structure:
         self.containers[(x, y + self.base, z)] = loot
 
     def marker(self, x, y, z, character):
-        self.set(x, y, z, ("frozen:spawn_marker", {"frozen:character": String(character)}))
+        self.markers.append((x, y, z, character))
+        if self.with_markers:
+            self.set(x, y, z, ("frozen:spawn_marker", {"frozen:character": String(character)}))
 
     def to_nbt(self):
         w, h, d = self.size
@@ -146,22 +158,22 @@ class Structure:
             },
         }
 
-    def save(self, name):
-        os.makedirs(OUT, exist_ok=True)
+    def save(self, name, out_dir=OUT):
+        os.makedirs(out_dir, exist_ok=True)
         out = bytearray()
         write_named(out, "", self.to_nbt())
-        with open(os.path.join(OUT, name + ".mcstructure"), "wb") as f:
+        with open(os.path.join(out_dir, name + ".mcstructure"), "wb") as f:
             f.write(out)
         return len(out)
 
 
 # --- Ice Castle ---------------------------------------------------------------
 
-def ice_castle():
+def ice_castle(with_markers=True):
     packed, blue = block("packed_ice"), block("blue_ice")
     glass, light = block("light_blue_stained_glass"), block("sea_lantern")
     stairs = block("quartz_stairs", weirdo_direction=Int(2), upside_down_bit=Byte(0))
-    s = Structure(17, 34, 17, foundation=4)
+    s = Structure(17, 34, 17, foundation=4, with_markers=with_markers)
     s.foundation(packed)
     s.fill(0, 1, 0, 16, 33, 16, AIR)
     s.fill(0, 0, 0, 16, 0, 16, packed)
@@ -219,12 +231,12 @@ def ice_castle():
 
 # --- Arendelle ----------------------------------------------------------------
 
-def arendelle():
+def arendelle(with_markers=True):
     bricks, cobble = block("stone_bricks"), block("cobblestone")
     planks, log = block("spruce_planks"), block("spruce_log", pillar_axis=String("y"))
     roof, tower_roof = block("dark_oak_planks"), block("green_terracotta")
     glass, lantern = block("glass"), block("lantern", hanging=Byte(0))
-    s = Structure(33, 16, 33, foundation=3)
+    s = Structure(33, 16, 33, foundation=3, with_markers=with_markers)
     s.foundation(cobble)
     s.fill(0, 1, 0, 32, 15, 32, AIR)
     s.fill(0, 0, 0, 32, 0, 32, block("snow"))

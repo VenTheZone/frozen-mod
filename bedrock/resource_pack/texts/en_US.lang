@@ -29,6 +29,7 @@ frozen.winter.none=There is no winter to thaw... yet.
 frozen.winter.active=§b❄ Eternal Winter ❄
 
 item.frozen.storybook=Frozen Storybook
+frozen.world.ready=§b[Frozen]§r Welcome to the kingdom of Arendelle! Anna, Elsa, Kristoff, Sven and Olaf are in town. Elsa's Ice Castle stands 70 blocks north, guarded by Marshmallow.
 frozen.status.loaded=§b[Frozen]§r Add-on v%s is running.
 frozen.status.building=§b[Frozen]§r Building Arendelle around you... this can take up to a minute on phones.
 frozen.status.built=§b[Frozen]§r Welcome to Arendelle!

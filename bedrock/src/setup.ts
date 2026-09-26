@@ -4,7 +4,13 @@ import { placeStructure, spawnMarkersIn } from "./spawns.ts";
 import { announceChapter, currentChapter, currentChapterKey, give } from "./story.ts";
 import { CHAPTERS } from "./storyline.ts";
 
-const VERSION = "1.1.1";
+const VERSION = "1.2.0";
+/** Scoreboard created by the Frozen World's setup functions; that world builds its own town and kit. */
+export const WORLD_OBJECTIVE = "frozen_world";
+
+export function isFrozenWorld(): boolean {
+	return world.scoreboard.getObjective(WORLD_OBJECTIVE) !== undefined;
+}
 const BUILT_KEY = "frozen:arendelle_built";
 const KIT_KEY = "frozen:kit_given";
 /** Worlds younger than this (20 minutes) get Arendelle built around the first player automatically. */
@@ -81,6 +87,10 @@ function giveKit(player: Player): void {
 
 function onJoin(player: Player): void {
 	player.sendMessage({ translate: "frozen.status.loaded", with: [VERSION] });
+	if (isFrozenWorld()) {
+		system.runTimeout(() => player.isValid && announceChapter(player), 200);
+		return;
+	}
 	const shouldBuild = !world.getDynamicProperty(BUILT_KEY) && world.getAbsoluteTime() < NEW_WORLD_TICKS;
 	if (shouldBuild) {
 		player.sendMessage({ translate: "frozen.status.building" });
@@ -94,7 +104,7 @@ function onJoin(player: Player): void {
 async function showStorybook(player: Player): Promise<void> {
 	const chapter = currentChapter();
 	const id = currentChapterKey();
-	const canBuild = !world.getDynamicProperty(BUILT_KEY);
+	const canBuild = !world.getDynamicProperty(BUILT_KEY) && !isFrozenWorld();
 	const form = new ActionFormData()
 		.title({ translate: "frozen.storybook.title" })
 		.body({
@@ -134,6 +144,7 @@ export const storybookComponent: ItemCustomComponent = {
 
 export function registerSetup(): void {
 	world.afterEvents.playerSpawn.subscribe(({ player, initialSpawn }) => {
-		if (initialSpawn) onJoin(player);
+		// Give the world's setup functions a second to create their scoreboard first.
+		if (initialSpawn) system.runTimeout(() => player.isValid && onJoin(player), 20);
 	});
 }
