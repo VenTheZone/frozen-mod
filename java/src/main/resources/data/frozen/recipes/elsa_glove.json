@@ -1,0 +1,10 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"pattern": [" C ", "CLC", " B "],
+	"key": {
+		"C": { "item": "frozen:snowflake_crystal" },
+		"L": { "item": "minecraft:leather" },
+		"B": { "item": "minecraft:blue_ice" }
+	},
+	"result": { "item": "frozen:elsa_glove" }
+}

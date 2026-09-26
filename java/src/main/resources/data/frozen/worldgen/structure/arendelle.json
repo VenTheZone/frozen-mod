@@ -1,0 +1,7 @@
+{
+	"type": "frozen:arendelle",
+	"biomes": "#frozen:has_structure/arendelle",
+	"step": "surface_structures",
+	"spawn_overrides": {},
+	"terrain_adaptation": "none"
+}

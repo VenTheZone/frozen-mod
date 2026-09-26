@@ -1,0 +1,10 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"pattern": ["C", "B", "S"],
+	"key": {
+		"C": { "item": "frozen:snowflake_crystal" },
+		"B": { "item": "minecraft:blue_ice" },
+		"S": { "item": "minecraft:stick" }
+	},
+	"result": { "item": "frozen:ice_sword" }
+}

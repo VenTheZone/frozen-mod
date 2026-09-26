@@ -1,0 +1,21 @@
+{
+	"schemaVersion": 1,
+	"id": "frozen",
+	"version": "${version}",
+	"name": "Frozen",
+	"description": "Let it go! Elsa, Anna, Olaf, Kristoff, Sven, Marshmallow, ice powers, the Ice Castle, Arendelle and the Eternal Winter.",
+	"authors": ["V"],
+	"license": "CC0-1.0",
+	"icon": "assets/frozen/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": ["com.v.frozen.FrozenMod"],
+		"client": ["com.v.frozen.client.FrozenModClient"]
+	},
+	"depends": {
+		"fabricloader": ">=0.15.0",
+		"minecraft": "~1.20.1",
+		"java": ">=17",
+		"fabric-api": "*"
+	}
+}

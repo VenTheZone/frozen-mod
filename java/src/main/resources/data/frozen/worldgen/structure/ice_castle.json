@@ -1,0 +1,7 @@
+{
+	"type": "frozen:ice_castle",
+	"biomes": "#frozen:has_structure/ice_castle",
+	"step": "surface_structures",
+	"spawn_overrides": {},
+	"terrain_adaptation": "none"
+}

@@ -1,0 +1,9 @@
+{
+	"structures": [{ "structure": "frozen:ice_castle", "weight": 1 }],
+	"placement": {
+		"type": "minecraft:random_spread",
+		"spacing": 48,
+		"separation": 16,
+		"salt": 1225191
+	}
+}

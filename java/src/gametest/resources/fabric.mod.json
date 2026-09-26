@@ -1,0 +1,14 @@
+{
+	"schemaVersion": 1,
+	"id": "frozen_gametest",
+	"version": "1.0.0",
+	"name": "Frozen GameTests",
+	"environment": "*",
+	"entrypoints": {
+		"fabric-gametest": ["com.v.frozen.test.FrozenGameTests", "com.v.frozen.test.PowerGameTests", "com.v.frozen.test.EntityGameTests", "com.v.frozen.test.StructureGameTests", "com.v.frozen.test.WinterGameTests"]
+	},
+	"depends": {
+		"frozen": "*",
+		"fabric-gametest-api-v1": "*"
+	}
+}

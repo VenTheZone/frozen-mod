@@ -1,0 +1,27 @@
+{
+	"type": "minecraft:chest",
+	"pools": [
+		{
+			"rolls": { "type": "minecraft:uniform", "min": 4, "max": 7 },
+			"entries": [
+				{ "type": "minecraft:item", "name": "frozen:snowflake_crystal", "weight": 20,
+					"functions": [{ "function": "minecraft:set_count", "count": { "type": "minecraft:uniform", "min": 1, "max": 3 } }] },
+				{ "type": "minecraft:item", "name": "minecraft:blue_ice", "weight": 15,
+					"functions": [{ "function": "minecraft:set_count", "count": { "type": "minecraft:uniform", "min": 4, "max": 12 } }] },
+				{ "type": "minecraft:item", "name": "minecraft:diamond", "weight": 5,
+					"functions": [{ "function": "minecraft:set_count", "count": { "type": "minecraft:uniform", "min": 1, "max": 2 } }] },
+				{ "type": "minecraft:item", "name": "minecraft:emerald", "weight": 10,
+					"functions": [{ "function": "minecraft:set_count", "count": { "type": "minecraft:uniform", "min": 2, "max": 8 } }] },
+				{ "type": "minecraft:item", "name": "frozen:ice_helmet", "weight": 3 },
+				{ "type": "minecraft:item", "name": "frozen:ice_boots", "weight": 3 }
+			]
+		},
+		{
+			"rolls": 1,
+			"entries": [
+				{ "type": "minecraft:item", "name": "frozen:elsa_glove", "weight": 1 },
+				{ "type": "minecraft:empty", "weight": 2 }
+			]
+		}
+	]
+}
