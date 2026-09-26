@@ -1,4 +1,4 @@
-import { Block, BlockCustomComponent } from "@minecraft/server";
+import { Block, BlockCustomComponent, Dimension, Vector3 } from "@minecraft/server";
 
 export const MARKER = "frozen:spawn_marker";
 export const CHARACTER_STATE = "frozen:character";
@@ -11,6 +11,22 @@ function spawnFromMarker(block: Block): void {
 	block.setType("minecraft:air");
 	if (character) {
 		block.dimension.spawnEntity(`frozen:${character}`, location);
+	}
+}
+
+/** Spawns every marker inside a structure the script just placed, without waiting for block ticks. */
+export function spawnMarkersIn(dimension: Dimension, origin: Vector3, size: Vector3): void {
+	for (let x = 0; x < size.x; x++) {
+		for (let y = 0; y < size.y; y++) {
+			for (let z = 0; z < size.z; z++) {
+				try {
+					const block = dimension.getBlock({ x: origin.x + x, y: origin.y + y, z: origin.z + z });
+					if (block?.typeId === MARKER) spawnFromMarker(block);
+				} catch {
+					// outside the world height
+				}
+			}
+		}
 	}
 }
 

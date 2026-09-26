@@ -14,6 +14,12 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 RP = os.path.join(HERE, "..", "resource_pack")
 BP = os.path.join(HERE, "..", "behavior_pack")
 JAVA_GEN = os.path.join(HERE, "..", "..", "java", "tools", "gen_textures.py")
+STORYBOOK = [
+    "", "...nnnnnnnnnn...", "...nbbbbbbbbnw..", "...nbbbbcbbbnw..", "...nbcbbcbbcnw..",
+    "...nbbcbcbcbnw..", "...nbbbwwwbbnw..", "...ncccwwwccnw..", "...nbbbwwwbbnw..",
+    "...nbbcbcbcbnw..", "...nbcbbcbbcnw..", "...nbbbbcbbbnw..", "...nbbbbbbbbnw..",
+    "...nnnnnnnnnnw..", "....wwwwwwwwww..",
+]
 
 
 def load_java_generator():
@@ -40,6 +46,7 @@ def main():
         gen.gen_sven(rng)
         gen.gen_marshmallow(rng)
         gen.Img(16, 16).save(gen.TEX, "block", "spawn_marker.png")
+        gen.ascii_art(STORYBOOK).save(gen.TEX, "item", "storybook.png")
 
         armor_dst = os.path.join(RP, "textures", "models", "armor")
         os.makedirs(armor_dst, exist_ok=True)

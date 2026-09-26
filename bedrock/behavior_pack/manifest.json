@@ -4,29 +4,61 @@
 		"name": "Frozen (Behavior)",
 		"description": "Elsa, Anna, Olaf, Kristoff, Sven, Marshmallow, ice powers, the Ice Castle, Arendelle and the Eternal Winter.",
 		"uuid": "fc8150a6-73e3-426d-85ee-f5006cf2cb38",
-		"version": [1, 0, 0],
-		"min_engine_version": [1, 21, 90]
+		"version": [
+			1,
+			1,
+			0
+		],
+		"min_engine_version": [
+			1,
+			21,
+			90
+		]
 	},
 	"modules": [
 		{
 			"type": "data",
 			"uuid": "292a8b88-b071-4232-9856-b1518ef854a0",
-			"version": [1, 0, 0]
+			"version": [
+				1,
+				1,
+				0
+			]
 		},
 		{
 			"type": "script",
 			"language": "javascript",
 			"uuid": "9fc4695d-3e64-468f-b6ac-59b6075b5d67",
 			"entry": "scripts/main.js",
-			"version": [1, 0, 0]
+			"version": [
+				1,
+				1,
+				0
+			]
 		}
 	],
 	"dependencies": [
-		{ "uuid": "d894990e-9b46-4eff-844f-25158fb81649", "version": [1, 0, 0] },
-		{ "module_name": "@minecraft/server", "version": "2.0.0" }
+		{
+			"uuid": "d894990e-9b46-4eff-844f-25158fb81649",
+			"version": [
+				1,
+				1,
+				0
+			]
+		},
+		{
+			"module_name": "@minecraft/server",
+			"version": "2.0.0"
+		},
+		{
+			"module_name": "@minecraft/server-ui",
+			"version": "2.0.0"
+		}
 	],
 	"metadata": {
-		"authors": ["VenTheZone"],
+		"authors": [
+			"VenTheZone"
+		],
 		"license": "CC0-1.0",
 		"url": "https://github.com/VenTheZone/frozen-mod"
 	}

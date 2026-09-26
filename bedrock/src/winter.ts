@@ -1,9 +1,7 @@
-import { Block, EquipmentSlot, GameMode, Player, system, WeatherType, world } from "@minecraft/server";
+import { Block, Player, system, WeatherType, world } from "@minecraft/server";
 import { snowAction } from "./logic.ts";
 
 const ACTIVE_KEY = "frozen:eternal_winter";
-const HEART = "frozen:true_love_heart";
-const CURERS = new Set(["frozen:elsa", "frozen:anna"]);
 const EFFECT_INTERVAL = 20;
 const RADIUS = 16;
 const ATTEMPTS_PER_PLAYER = 12;
@@ -27,27 +25,6 @@ export function endWinter(): void {
 	world.setDynamicProperty(ACTIVE_KEY, false);
 	world.getDimension("overworld").setWeather(WeatherType.Clear, WEATHER_TICKS);
 	world.sendMessage({ translate: "frozen.winter.end" });
-}
-
-function useHeart(player: Player): void {
-	if (!isWinterActive()) {
-		player.onScreenDisplay.setActionBar({ translate: "frozen.winter.none" });
-		return;
-	}
-	if (player.getGameMode() !== GameMode.Creative) {
-		const equippable = player.getComponent("minecraft:equippable");
-		const stack = equippable?.getEquipment(EquipmentSlot.Mainhand);
-		if (equippable && stack?.typeId === HEART) {
-			if (stack.amount > 1) {
-				stack.amount -= 1;
-				equippable.setEquipment(EquipmentSlot.Mainhand, stack);
-			} else {
-				equippable.setEquipment(EquipmentSlot.Mainhand, undefined);
-			}
-		}
-	}
-	player.dimension.playSound("block.amethyst_block.resonate", player.location);
-	endWinter();
 }
 
 function freezeColumn(block: Block): void {
@@ -95,12 +72,6 @@ export function registerWinter(): void {
 		if (event.hurtEntity.typeId === "frozen:elsa" && event.damageSource.damagingEntity instanceof Player) {
 			startWinter();
 		}
-	});
-	world.beforeEvents.playerInteractWithEntity.subscribe((event) => {
-		if (event.itemStack?.typeId !== HEART || !CURERS.has(event.target.typeId)) return;
-		event.cancel = true;
-		const player = event.player;
-		system.run(() => useHeart(player));
 	});
 	system.runInterval(tickWinter, EFFECT_INTERVAL);
 }

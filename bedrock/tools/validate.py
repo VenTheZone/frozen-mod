@@ -188,6 +188,15 @@ def main():
     for key in set(re.findall(r'translate: "([^"]+)"', scripts)):
         if key not in lang:
             problem(f"script uses missing lang key {key}")
+    storyline = open(os.path.join(ROOT, "src", "storyline.ts"), encoding="utf-8").read()
+    for chapter in re.findall(r'\{ id: "([a-z_]+)"', storyline) + ["complete"]:
+        for part in ("title", "goal", "hint"):
+            if f"frozen.story.{chapter}.{part}" not in lang:
+                problem(f"missing lang key frozen.story.{chapter}.{part}")
+    spawn_eggs = {f"{eid}_spawn_egg" for eid, d in bp_ids.items() if d["minecraft:entity"]["description"].get("is_spawnable")}
+    for kit_item in re.findall(r'\["(frozen:[a-z_]+)", \d+\]', scripts):
+        if kit_item not in own_ids | spawn_eggs:
+            problem(f"starter kit gives unknown item {kit_item}")
 
     # recipes only use known frozen ids
     for path, d in recipes.items():

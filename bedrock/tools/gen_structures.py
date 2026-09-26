@@ -282,6 +282,7 @@ def arendelle():
         s.set(x, 1, z, lantern)
     s.container(14, 1, 29, "loot_tables/chests/arendelle.json")
 
+    s.marker(16, 1, 28, "elsa")
     s.marker(15, 1, 26, "anna")
     s.marker(18, 1, 26, "kristoff")
     s.marker(20, 1, 17, "sven")

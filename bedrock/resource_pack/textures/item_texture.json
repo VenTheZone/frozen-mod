@@ -4,6 +4,7 @@
 	"texture_data": {
 		"frozen_snowflake_crystal": { "textures": "textures/item/snowflake_crystal" },
 		"frozen_true_love_heart": { "textures": "textures/item/true_love_heart" },
+		"frozen_storybook": { "textures": "textures/item/storybook" },
 		"frozen_elsa_glove": { "textures": "textures/item/elsa_glove" },
 		"frozen_ice_sword": { "textures": "textures/item/ice_sword" },
 		"frozen_ice_helmet": { "textures": "textures/item/ice_helmet" },

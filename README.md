@@ -14,7 +14,27 @@ A *Frozen*-themed add-on for **Minecraft Bedrock Edition**, the version on phone
 3. Create or edit a world, go to **Behavior Packs**, and activate **Frozen (Behavior)**. The resource pack is added with it.
 4. No experimental toggles are needed. Requires Minecraft Bedrock **1.21.90 or newer**.
 
-Structures only appear in **newly generated chunks**. A fresh world, or unexplored land in an existing one, works best.
+## Playing
+
+- **New world (recommended):** create a world with the add-on active. When you first join, **Arendelle is built around spawn** and the story begins.
+- **Existing world:** you'll receive the starter kit. Open the **Frozen Storybook** and tap **Build Arendelle here** (it asks before replacing any blocks).
+- **Starter kit** (once per player): Frozen Storybook, Elsa's Glove, 3 snowflake crystals, 8 carrots and an Olaf spawn egg.
+- More Ice Castles and Arendelles also generate in unexplored snowy land.
+
+### The story
+
+Open the **Frozen Storybook** at any time to see your current chapter, goal and a hint.
+
+1. **Coronation Day:** talk to Anna in Arendelle.
+2. **Let It Go:** talk to Queen Elsa. She panics, flees, and the Eternal Winter begins.
+3. **Reindeers Are Better Than People:** find Kristoff (he gives you carrots).
+4. **In Summer:** give Olaf a carrot.
+5. **The North Mountain:** travel 120 blocks and the Ice Castle rises ahead of you.
+6. **Marshmallow:** defeat the castle's guardian.
+7. **A Frozen Heart:** craft an Act of True Love.
+8. **An Act of True Love:** give it to Anna or Elsa to bring summer back.
+
+The story is shared by everyone in the world.
 
 ## What's inside
 
@@ -41,6 +61,9 @@ Structures only appear in **newly generated chunks**. A fresh world, or unexplor
 Bedrock can't run in CI, so check these on a device after importing:
 
 - [ ] Both packs import, and the world loads with no content-log errors.
+- [ ] A new world builds Arendelle at spawn, and you get the starter kit and the chapter 1 title.
+- [ ] The storybook opens, and "Build Arendelle here" works in an existing world.
+- [ ] Chapters advance: Anna, Elsa (she flees, the winter starts), Kristoff, Olaf, the castle rising after 120 blocks, Marshmallow, crafting the heart, true love.
 - [ ] The glove fires blasts, builds a bridge or stairs, and summons spikes. The ice melts.
 - [ ] Hitting Elsa starts the winter. The Act of True Love on Anna or Elsa ends it.
 - [ ] Olaf tames with carrots. Sven can be tamed, saddled and ridden.
