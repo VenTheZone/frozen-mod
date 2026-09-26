@@ -1,13 +1,13 @@
 {
 	"format_version": 2,
 	"header": {
-		"name": "Frozen (Resources)",
+		"name": "Frozen v1.2.1 - Resources",
 		"description": "Textures, models and translations for the Frozen add-on.",
 		"uuid": "d894990e-9b46-4eff-844f-25158fb81649",
 		"version": [
 			1,
 			2,
-			0
+			1
 		],
 		"min_engine_version": [
 			1,
@@ -22,7 +22,7 @@
 			"version": [
 				1,
 				2,
-				0
+				1
 			]
 		}
 	],
@@ -32,7 +32,7 @@
 			"version": [
 				1,
 				2,
-				0
+				1
 			]
 		}
 	],

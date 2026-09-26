@@ -1,13 +1,13 @@
 {
 	"format_version": 2,
 	"header": {
-		"name": "Frozen (Behavior)",
+		"name": "Frozen v1.2.1 - Behavior",
 		"description": "Elsa, Anna, Olaf, Kristoff, Sven, Marshmallow, ice powers, the Ice Castle, Arendelle and the Eternal Winter.",
 		"uuid": "fc8150a6-73e3-426d-85ee-f5006cf2cb38",
 		"version": [
 			1,
 			2,
-			0
+			1
 		],
 		"min_engine_version": [
 			1,
@@ -22,7 +22,7 @@
 			"version": [
 				1,
 				2,
-				0
+				1
 			]
 		},
 		{
@@ -33,7 +33,7 @@
 			"version": [
 				1,
 				2,
-				0
+				1
 			]
 		}
 	],
@@ -43,7 +43,7 @@
 			"version": [
 				1,
 				2,
-				0
+				1
 			]
 		},
 		{
