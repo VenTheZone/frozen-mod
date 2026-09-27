@@ -18,7 +18,7 @@ import gen_structures as gs  # noqa: E402
 
 ROOT = os.path.normpath(os.path.join(HERE, ".."))
 DIST = os.path.join(ROOT, "dist")
-WORLD_NAME = "Frozen - Kingdom of Arendelle (v1.2.2)"
+WORLD_NAME = "Frozen - Kingdom of Arendelle (v1.2.3)"
 WORLD_BP_UUID = "5b1f7c9e-2d4a-4f3b-9e8c-7a6d5c4b3a21"
 WORLD_BP_MODULE_UUID = "8e2d4c6a-1b3f-4a5e-9c7d-2f4e6a8c0b13"
 WORLD_BP_VERSION = [1, 0, 0]
@@ -27,7 +27,9 @@ PACK_DIRS = {"behavior_pack": ("behavior_packs", "Frozen_BP"), "resource_pack": 
 # Flat world: bedrock at y=-64, dirt -63..-62, snow at -61, so the floor of every building is y=-60.
 FLOOR_Y = -60
 FLAT_LAYERS = {
-    "biome_id": 12,  # ice_plains
+    # cold_beach (snowy beach): it still snows, but matches neither structure feature rule,
+    # so no extra Arendelles or castles (each with its own characters) generate around the world's own.
+    "biome_id": 26,
     "block_layers": [
         {"block_name": "minecraft:bedrock", "count": 1},
         {"block_name": "minecraft:dirt", "count": 2},
@@ -144,7 +146,7 @@ def main():
     world_manifest = {
         "format_version": 2,
         "header": {
-            "name": "Frozen v1.2.2 - World Setup",
+            "name": "Frozen v1.2.3 - World Setup",
             "description": "Builds Arendelle and the Ice Castle when this world first loads.",
             "uuid": WORLD_BP_UUID, "version": WORLD_BP_VERSION, "min_engine_version": [1, 21, 90],
         },

@@ -18,7 +18,7 @@
 		},
 		"distribution": {
 			"iterations": 1,
-			"scatter_chance": { "numerator": 1, "denominator": 40 },
+			"scatter_chance": { "numerator": 1, "denominator": 100 },
 			"x": { "distribution": "uniform", "extent": [0, 15] },
 			"y": "q.heightmap(v.worldx, v.worldz) - 4",
 			"z": { "distribution": "uniform", "extent": [0, 15] }

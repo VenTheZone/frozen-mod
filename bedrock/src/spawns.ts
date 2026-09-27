@@ -2,6 +2,8 @@ import { Block, BlockCustomComponent, Dimension, Vector3, world } from "@minecra
 
 export const MARKER = "frozen:spawn_marker";
 export const CHARACTER_STATE = "frozen:character";
+/** A marker never spawns a character if the same character is already this close (e.g. overlapping towns). */
+const DUPLICATE_RADIUS = 48;
 
 /** Replaces a structure's hidden marker block with the character it names. Runs at most once per marker. */
 function spawnFromMarker(block: Block): void {
@@ -9,9 +11,10 @@ function spawnFromMarker(block: Block): void {
 	const character = block.permutation.getState(CHARACTER_STATE as never) as string | undefined;
 	const location = block.bottomCenter();
 	block.setType("minecraft:air");
-	if (character) {
-		block.dimension.spawnEntity(`frozen:${character}`, location);
-	}
+	if (!character) return;
+	const type = `frozen:${character}`;
+	if (block.dimension.getEntities({ type, location, maxDistance: DUPLICATE_RADIUS }).length > 0) return;
+	block.dimension.spawnEntity(type, location);
 }
 
 /** Places a pack structure, falling back to the /structure command if the script API refuses. Throws on failure. */
