@@ -127,6 +127,13 @@ export function missingForTrade(have: Record<string, number>, wants: [string, nu
 	return wants.filter(([id, n]) => (have[id] ?? 0) < n).map(([id, n]) => [id, n - (have[id] ?? 0)]);
 }
 
+/** Sound id of the recorded voice clip for a line of dialogue (FNV-1a hash of the text). */
+export function voiceId(text: string): string {
+	let hash = 0x811c9dc5;
+	for (let i = 0; i < text.length; i++) hash = Math.imul(hash ^ text.charCodeAt(i), 0x01000193);
+	return `frozen.voice.${(hash >>> 0).toString(16).padStart(8, "0")}`;
+}
+
 /** Per-player, per-ability cooldown gate keyed by game tick. */
 export class Cooldowns {
 	private readonly readyAt = new Map<string, number>();

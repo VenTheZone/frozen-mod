@@ -23,10 +23,10 @@ import gen_world as gw  # noqa: E402
 DEFAULT_BASE = "/sdcard/Download/Frozen Ghiacciata (Bedrock).mcworld"
 DOWNLOADS = "/sdcard/Download"
 OUT_NAME = "FROZEN_STORY_Ghiacciata_Kingdom.mcworld"
-WORLD_NAME = "★ Frozen STORY - Ghiacciata Kingdom (big map, v2.0.0)"
+WORLD_NAME = "★ Frozen STORY - Ghiacciata Kingdom (big map, v2.1.0)"
 SETUP_UUID = "3c7e9a1f-6b2d-4e8a-a5c3-9d1f7b2e4c60"
 SETUP_MODULE_UUID = "7a4d2c8e-1f3b-4c9a-b6e5-2d8f0a3c1e97"
-SETUP_VERSION = [2, 0, 0]
+SETUP_VERSION = [2, 1, 0]
 
 # Surveyed on the map: (x, y, z) is the air block a character stands in.
 SPAWN = (145, 41, 25)  # castle courtyard, open sky, cobblestone floor at y=40

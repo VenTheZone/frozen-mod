@@ -4,7 +4,7 @@ import { AMBIENT, CAMPAIGN, OFFERS } from "./campaign.ts";
 import { applyEffects, visibleChoices } from "./conversation-logic.ts";
 import type { Choice, Conversation, DialogueNode, Effects } from "./conversation-logic.ts";
 import { notify } from "./guide.ts";
-import { missingForTrade } from "./logic.ts";
+import { missingForTrade, voiceId } from "./logic.ts";
 import { currentChapterKey, freezeHeart, give, hasItem, saveStoryState, storyEvent, storyState } from "./story.ts";
 import { isWinterActive, startWinter } from "./winter.ts";
 
@@ -18,6 +18,21 @@ const CARROT = "minecraft:carrot";
 const COOLDOWN_TICKS = 40;
 const busy = new Set<string>();
 const readyAt = new Map<string, number>();
+const speaking = new Map<string, string>();
+
+function hush(player: Player): void {
+	const id = speaking.get(player.id);
+	speaking.delete(player.id);
+	if (id && player.isValid) player.runCommand(`stopsound @s ${id}`);
+}
+
+/** Plays the recorded voice clip for a line (see tools/gen_voices.py), cutting off the previous one. */
+function speak(player: Player, text: string): void {
+	hush(player);
+	const id = voiceId(text);
+	speaking.set(player.id, id);
+	player.playSound(id);
+}
 
 function counts(container: Container): Record<string, number> {
 	const have: Record<string, number> = {};
@@ -102,6 +117,7 @@ async function play(player: Player, target: Entity, conv: Conversation): Promise
 		const form: ActionFormData = new ActionFormData().title(node.speaker).body(node.text);
 		for (const choice of choices) form.button(choice.text);
 		if (choices.length === 0) form.button("Goodbye");
+		speak(player, node.text);
 		const response: ActionFormResponse = await form.show(player);
 		if (response.canceled || response.selection === undefined) return false;
 		const choice: Choice | undefined = choices[response.selection];
@@ -121,10 +137,13 @@ async function ambient(player: Player, npc: string): Promise<void> {
 	const lines = AMBIENT[npc];
 	if (!lines) return;
 	const pool = isWinterActive() && lines.winterLines ? lines.winterLines : lines.lines;
-	const form = new ActionFormData().title(NAMES[npc]).body(pool[Math.floor(Math.random() * pool.length)]);
+	const line = pool[Math.floor(Math.random() * pool.length)];
+	const form = new ActionFormData().title(NAMES[npc]).body(line);
 	if (lines.trade) form.button("Trade");
 	form.button("Goodbye");
+	speak(player, line);
 	const response = await form.show(player);
+	hush(player);
 	if (lines.trade && response.selection === 0) await showTrades(player, npc);
 }
 
@@ -146,6 +165,7 @@ function onTalk(player: Player, target: Entity): void {
 	talk(player, target)
 		.catch((error) => console.warn(`[frozen] conversation failed: ${error}`))
 		.finally(() => {
+			hush(player);
 			busy.delete(player.id);
 			readyAt.set(player.id, system.currentTick + COOLDOWN_TICKS);
 		});

@@ -1,6 +1,13 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { bearingArrow, bridgePath, Cooldowns, duplicatesToRemove, facingFromYaw, missingForTrade, snowAction, spikeRing } from "./logic.ts";
+import { bearingArrow, bridgePath, Cooldowns, duplicatesToRemove, facingFromYaw, missingForTrade, snowAction, spikeRing, voiceId } from "./logic.ts";
+
+test("voiceId is a stable, per-line sound id", () => {
+	assert.equal(voiceId("Hi!"), voiceId("Hi!"));
+	assert.notEqual(voiceId("Hi!"), voiceId("Hi?"));
+	assert.match(voiceId("The cold never bothered me anyway."), /^frozen\.voice\.[0-9a-f]{8}$/);
+	assert.equal(voiceId(""), "frozen.voice.811c9dc5");
+});
 
 const has = (list: { x: number; y: number; z: number }[], x: number, y: number, z: number) =>
 	list.some((p) => p.x === x && p.y === y && p.z === z);

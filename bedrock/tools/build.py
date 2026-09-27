@@ -21,6 +21,7 @@ def main():
         run("npm", "install", "--no-audit", "--no-fund")
     run("npm", "run", "build:scripts")
     run("npm", "test")
+    run(sys.executable, os.path.join(HERE, "gen_voices.py"))
     run(sys.executable, os.path.join(HERE, "validate.py"))
 
     os.makedirs(DIST, exist_ok=True)

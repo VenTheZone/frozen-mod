@@ -18,10 +18,10 @@ import gen_structures as gs  # noqa: E402
 
 ROOT = os.path.normpath(os.path.join(HERE, ".."))
 DIST = os.path.join(ROOT, "dist")
-WORLD_NAME = "Frozen - Kingdom of Arendelle (v2.0.0)"
+WORLD_NAME = "Frozen - Kingdom of Arendelle (v2.1.0)"
 WORLD_BP_UUID = "5b1f7c9e-2d4a-4f3b-9e8c-7a6d5c4b3a21"
 WORLD_BP_MODULE_UUID = "8e2d4c6a-1b3f-4a5e-9c7d-2f4e6a8c0b13"
-WORLD_BP_VERSION = [2, 0, 0]
+WORLD_BP_VERSION = [2, 1, 0]
 PACK_DIRS = {"behavior_pack": ("behavior_packs", "Frozen_BP"), "resource_pack": ("resource_packs", "Frozen_RP")}
 
 # Flat world: bedrock at y=-64, dirt -63..-62, snow at -61, so the floor of every building is y=-60.
@@ -161,7 +161,7 @@ def main():
     world_manifest = {
         "format_version": 2,
         "header": {
-            "name": "Frozen v2.0.0 - World Setup",
+            "name": "Frozen v2.1.0 - World Setup",
             "description": "Builds Arendelle and the Ice Castle when this world first loads.",
             "uuid": WORLD_BP_UUID, "version": WORLD_BP_VERSION, "min_engine_version": [1, 21, 90],
         },
