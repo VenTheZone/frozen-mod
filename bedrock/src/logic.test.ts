@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { bridgePath, Cooldowns, duplicatesToRemove, facingFromYaw, snowAction, spikeRing } from "./logic.ts";
+import { bridgePath, Cooldowns, duplicatesToRemove, facingFromYaw, missingForTrade, snowAction, spikeRing } from "./logic.ts";
 
 const has = (list: { x: number; y: number; z: number }[], x: number, y: number, z: number) =>
 	list.some((p) => p.x === x && p.y === y && p.z === z);
@@ -55,6 +55,13 @@ test("duplicatesToRemove keeps one per cluster and never removes tamed or named 
 	assert.deepEqual(duplicatesToRemove([at(0), at(5, true)], 48), [0]);
 	assert.deepEqual(duplicatesToRemove([at(0, true), at(5, true)], 48), []);
 	assert.deepEqual(duplicatesToRemove([], 48), []);
+});
+
+test("missingForTrade reports what is still needed", () => {
+	const wants: [string, number][] = [["minecraft:emerald", 16], ["minecraft:leather", 1]];
+	assert.deepEqual(missingForTrade({ "minecraft:emerald": 20, "minecraft:leather": 1 }, wants), []);
+	assert.deepEqual(missingForTrade({ "minecraft:emerald": 10 }, wants), [["minecraft:emerald", 6], ["minecraft:leather", 1]]);
+	assert.deepEqual(missingForTrade({}, []), []);
 });
 
 test("cooldowns gate per key", () => {

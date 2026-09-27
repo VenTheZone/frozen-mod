@@ -10,9 +10,17 @@
 			"frozen:wild": {
 				"minecraft:rideable": {
 					"seat_count": 1,
-					"family_types": ["player"],
+					"family_types": [
+						"player"
+					],
 					"interact_text": "action.interact.mount",
-					"seats": { "position": [0.0, 1.1, -0.2] }
+					"seats": {
+						"position": [
+							0.0,
+							1.1,
+							-0.2
+						]
+					}
 				},
 				"minecraft:tamemount": {
 					"min_temper": 0,
@@ -20,13 +28,32 @@
 					"feed_text": "action.interact.feed",
 					"ride_text": "action.interact.mount",
 					"feed_items": [
-						{ "item": "carrot", "temper_mod": 5 },
-						{ "item": "apple", "temper_mod": 3 },
-						{ "item": "wheat", "temper_mod": 3 },
-						{ "item": "golden_carrot", "temper_mod": 10 }
+						{
+							"item": "carrot",
+							"temper_mod": 5
+						},
+						{
+							"item": "apple",
+							"temper_mod": 3
+						},
+						{
+							"item": "wheat",
+							"temper_mod": 3
+						},
+						{
+							"item": "golden_carrot",
+							"temper_mod": 10
+						}
 					],
-					"auto_reject_items": [{ "item": "saddle" }],
-					"tame_event": { "event": "frozen:on_tame", "target": "self" }
+					"auto_reject_items": [
+						{
+							"item": "saddle"
+						}
+					],
+					"tame_event": {
+						"event": "frozen:on_tame",
+						"target": "self"
+					}
 				}
 			},
 			"frozen:tamed": {
@@ -34,9 +61,17 @@
 				"minecraft:rideable": {
 					"seat_count": 1,
 					"crouching_skip_interact": true,
-					"family_types": ["player"],
+					"family_types": [
+						"player"
+					],
 					"interact_text": "action.interact.ride.horse",
-					"seats": { "position": [0.0, 1.1, -0.2] }
+					"seats": {
+						"position": [
+							0.0,
+							1.1,
+							-0.2
+						]
+					}
 				},
 				"minecraft:interact": {
 					"interactions": [
@@ -44,16 +79,33 @@
 							"on_interact": {
 								"filters": {
 									"all_of": [
-										{ "test": "has_equipment", "subject": "self", "domain": "inventory", "operator": "not", "value": "saddle" },
-										{ "test": "has_equipment", "subject": "other", "domain": "hand", "value": "saddle" },
-										{ "test": "is_sneak_held", "subject": "other", "value": false }
+										{
+											"test": "has_equipment",
+											"subject": "self",
+											"domain": "inventory",
+											"operator": "not",
+											"value": "saddle"
+										},
+										{
+											"test": "has_equipment",
+											"subject": "other",
+											"domain": "hand",
+											"value": "saddle"
+										},
+										{
+											"test": "is_sneak_held",
+											"subject": "other",
+											"value": false
+										}
 									]
 								},
 								"target": "self"
 							},
 							"equip_item_slot": "0",
 							"interact_text": "action.interact.saddle",
-							"play_sounds": ["saddle"]
+							"play_sounds": [
+								"saddle"
+							]
 						}
 					]
 				}
@@ -66,25 +118,62 @@
 			}
 		},
 		"components": {
-			"minecraft:type_family": { "family": ["sven", "reindeer", "mob"] },
-			"minecraft:health": { "value": 30, "max": 30 },
-			"minecraft:collision_box": { "width": 1.4, "height": 1.6 },
-			"minecraft:movement": { "value": 0.3 },
-			"minecraft:navigation.walk": { "avoid_water": true },
+			"minecraft:type_family": {
+				"family": [
+					"sven",
+					"reindeer",
+					"mob"
+				]
+			},
+			"minecraft:health": {
+				"value": 30,
+				"max": 30
+			},
+			"minecraft:collision_box": {
+				"width": 1.4,
+				"height": 1.6
+			},
+			"minecraft:movement": {
+				"value": 0.3
+			},
+			"minecraft:navigation.walk": {
+				"avoid_water": true
+			},
 			"minecraft:movement.basic": {},
 			"minecraft:jump.static": {},
-			"minecraft:horse.jump_strength": { "value": 0.8 },
+			"minecraft:horse.jump_strength": {
+				"value": 0.8
+			},
 			"minecraft:physics": {},
-			"minecraft:pushable": { "is_pushable": true, "is_pushable_by_piston": true },
-			"minecraft:breathable": { "total_supply": 15, "suffocate_time": 0 },
+			"minecraft:pushable": {
+				"is_pushable": true,
+				"is_pushable_by_piston": true
+			},
+			"minecraft:breathable": {
+				"total_supply": 15,
+				"suffocate_time": 0
+			},
 			"minecraft:nameable": {},
 			"minecraft:persistent": {},
-			"minecraft:leashable": { "soft_distance": 4.0, "hard_distance": 6.0, "max_distance": 10.0 },
+			"minecraft:leashable": {
+				"soft_distance": 4.0,
+				"hard_distance": 6.0,
+				"max_distance": 10.0
+			},
 			"minecraft:healable": {
 				"items": [
-					{ "item": "carrot", "heal_amount": 3 },
-					{ "item": "apple", "heal_amount": 3 },
-					{ "item": "golden_carrot", "heal_amount": 4 }
+					{
+						"item": "carrot",
+						"heal_amount": 3
+					},
+					{
+						"item": "apple",
+						"heal_amount": 3
+					},
+					{
+						"item": "golden_carrot",
+						"heal_amount": 4
+					}
 				]
 			},
 			"minecraft:equippable": {
@@ -92,28 +181,97 @@
 					{
 						"slot": 0,
 						"item": "saddle",
-						"accepted_items": ["saddle"],
-						"on_equip": { "event": "frozen:saddled" },
-						"on_unequip": { "event": "frozen:unsaddled" }
+						"accepted_items": [
+							"saddle"
+						],
+						"on_equip": {
+							"event": "frozen:saddled"
+						},
+						"on_unequip": {
+							"event": "frozen:unsaddled"
+						}
 					}
 				]
 			},
-			"minecraft:inventory": { "inventory_size": 2, "container_type": "horse" },
-			"minecraft:behavior.float": { "priority": 0 },
-			"minecraft:behavior.panic": { "priority": 3, "speed_multiplier": 1.2 },
-			"minecraft:behavior.tempt": { "priority": 4, "speed_multiplier": 1.1, "items": ["carrot", "golden_carrot"] },
-			"minecraft:behavior.random_stroll": { "priority": 6, "speed_multiplier": 0.7 },
-			"minecraft:behavior.look_at_player": { "priority": 7, "look_distance": 6 },
-			"minecraft:behavior.random_look_around": { "priority": 8 }
+			"minecraft:inventory": {
+				"inventory_size": 2,
+				"container_type": "horse"
+			},
+			"minecraft:behavior.float": {
+				"priority": 0
+			},
+			"minecraft:behavior.panic": {
+				"priority": 3,
+				"speed_multiplier": 1.2
+			},
+			"minecraft:behavior.tempt": {
+				"priority": 4,
+				"speed_multiplier": 1.1,
+				"items": [
+					"carrot",
+					"golden_carrot"
+				]
+			},
+			"minecraft:behavior.random_stroll": {
+				"priority": 6,
+				"speed_multiplier": 0.7
+			},
+			"minecraft:behavior.look_at_player": {
+				"priority": 7,
+				"look_distance": 6
+			},
+			"minecraft:behavior.random_look_around": {
+				"priority": 8
+			},
+			"minecraft:damage_sensor": {
+				"triggers": [
+					{
+						"on_damage": {
+							"filters": {
+								"test": "is_family",
+								"subject": "other",
+								"value": "player"
+							}
+						},
+						"deals_damage": "no"
+					}
+				]
+			}
 		},
 		"events": {
-			"minecraft:entity_spawned": { "add": { "component_groups": ["frozen:wild"] } },
-			"frozen:on_tame": {
-				"remove": { "component_groups": ["frozen:wild"] },
-				"add": { "component_groups": ["frozen:tamed"] }
+			"minecraft:entity_spawned": {
+				"add": {
+					"component_groups": [
+						"frozen:wild"
+					]
+				}
 			},
-			"frozen:saddled": { "add": { "component_groups": ["frozen:saddled"] } },
-			"frozen:unsaddled": { "remove": { "component_groups": ["frozen:saddled"] } }
+			"frozen:on_tame": {
+				"remove": {
+					"component_groups": [
+						"frozen:wild"
+					]
+				},
+				"add": {
+					"component_groups": [
+						"frozen:tamed"
+					]
+				}
+			},
+			"frozen:saddled": {
+				"add": {
+					"component_groups": [
+						"frozen:saddled"
+					]
+				}
+			},
+			"frozen:unsaddled": {
+				"remove": {
+					"component_groups": [
+						"frozen:saddled"
+					]
+				}
+			}
 		}
 	}
 }

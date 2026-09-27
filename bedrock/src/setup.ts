@@ -4,7 +4,7 @@ import { placeStructure, spawnMarkersIn } from "./spawns.ts";
 import { announceChapter, currentChapter, currentChapterKey, give } from "./story.ts";
 import { CHAPTERS } from "./storyline.ts";
 
-const VERSION = "1.2.4";
+const VERSION = "1.3.0";
 /** Entity type defined only by the Frozen World's own pack; that world builds its own town and kit. */
 const WORLD_FLAG = "frozen_world:flag";
 

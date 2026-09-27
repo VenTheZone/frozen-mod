@@ -7,24 +7,51 @@
 			"is_summonable": true
 		},
 		"components": {
-			"minecraft:type_family": { "family": ["frozen_royal", "anna", "mob"] },
-			"minecraft:health": { "value": 40, "max": 40 },
-			"minecraft:collision_box": { "width": 0.6, "height": 1.95 },
-			"minecraft:movement": { "value": 0.5 },
-			"minecraft:navigation.walk": { "avoid_water": true, "can_open_doors": true },
+			"minecraft:type_family": {
+				"family": [
+					"frozen_royal",
+					"anna",
+					"mob"
+				]
+			},
+			"minecraft:health": {
+				"value": 40,
+				"max": 40
+			},
+			"minecraft:collision_box": {
+				"width": 0.6,
+				"height": 1.95
+			},
+			"minecraft:movement": {
+				"value": 0.5
+			},
+			"minecraft:navigation.walk": {
+				"avoid_water": true,
+				"can_open_doors": true
+			},
 			"minecraft:movement.basic": {},
 			"minecraft:jump.static": {},
 			"minecraft:can_climb": {},
 			"minecraft:physics": {},
-			"minecraft:pushable": { "is_pushable": true, "is_pushable_by_piston": true },
-			"minecraft:breathable": { "total_supply": 15, "suffocate_time": 0 },
+			"minecraft:pushable": {
+				"is_pushable": true,
+				"is_pushable_by_piston": true
+			},
+			"minecraft:breathable": {
+				"total_supply": 15,
+				"suffocate_time": 0
+			},
 			"minecraft:nameable": {},
 			"minecraft:persistent": {},
 			"minecraft:interact": {
 				"interactions": [
 					{
 						"on_interact": {
-							"filters": { "test": "is_family", "subject": "other", "value": "player" },
+							"filters": {
+								"test": "is_family",
+								"subject": "other",
+								"value": "player"
+							},
 							"event": "frozen:talked",
 							"target": "self"
 						},
@@ -33,11 +60,39 @@
 					}
 				]
 			},
-			"minecraft:behavior.float": { "priority": 0 },
-			"minecraft:behavior.panic": { "priority": 1, "speed_multiplier": 0.7 },
-			"minecraft:behavior.random_stroll": { "priority": 8, "speed_multiplier": 0.6 },
-			"minecraft:behavior.look_at_player": { "priority": 9, "look_distance": 6, "probability": 0.02 },
-			"minecraft:behavior.random_look_around": { "priority": 10 }
+			"minecraft:behavior.float": {
+				"priority": 0
+			},
+			"minecraft:behavior.panic": {
+				"priority": 1,
+				"speed_multiplier": 0.7
+			},
+			"minecraft:behavior.random_stroll": {
+				"priority": 8,
+				"speed_multiplier": 0.6
+			},
+			"minecraft:behavior.look_at_player": {
+				"priority": 9,
+				"look_distance": 6,
+				"probability": 0.02
+			},
+			"minecraft:behavior.random_look_around": {
+				"priority": 10
+			},
+			"minecraft:damage_sensor": {
+				"triggers": [
+					{
+						"on_damage": {
+							"filters": {
+								"test": "is_family",
+								"subject": "other",
+								"value": "player"
+							}
+						},
+						"deals_damage": "no"
+					}
+				]
+			}
 		},
 		"events": {
 			"frozen:talked": {}

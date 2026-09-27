@@ -44,19 +44,21 @@ export function give(player: Player, typeId: string, amount = 1): boolean {
 	return true;
 }
 
-export function storyEvent(player: Player, event: StoryEvent): void {
+/** Advances the story if the event finishes the current chapter. Returns true when it did. */
+export function storyEvent(player: Player, event: StoryEvent): boolean {
 	const before = currentChapter();
 	const after = advance(before, event);
-	if (after === before) return;
+	if (after === before) return false;
 	world.setDynamicProperty(CHAPTER_KEY, after);
 	completeChapter(CHAPTERS[before].id, player);
-	announceChapter();
+	system.runTimeout(() => announceChapter(), 40);
+	return true;
 }
 
 function completeChapter(id: string, player: Player): void {
 	switch (id) {
 		case "let_it_go":
-			system.runTimeout(() => elsaFlees(player), 20);
+			system.runTimeout(() => elsaFlees(player), 60);
 			break;
 		case "ice_harvester":
 			give(player, "minecraft:carrot", 16);
@@ -164,9 +166,6 @@ function useHeart(player: Player): void {
 }
 
 export function registerStory(): void {
-	world.afterEvents.playerInteractWithEntity.subscribe(({ player, target }) => {
-		if (target.typeId.startsWith("frozen:")) storyEvent(player, { kind: "talk", entity: target.typeId });
-	});
 	world.afterEvents.entityDie.subscribe(({ deadEntity, damageSource }) => {
 		if (deadEntity.typeId !== "frozen:marshmallow") return;
 		const killer = damageSource.damagingEntity instanceof Player ? damageSource.damagingEntity : world.getAllPlayers()[0];

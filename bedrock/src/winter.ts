@@ -1,4 +1,4 @@
-import { Block, Player, system, WeatherType, world } from "@minecraft/server";
+import { Block, system, WeatherType, world } from "@minecraft/server";
 import { snowAction } from "./logic.ts";
 
 const ACTIVE_KEY = "frozen:eternal_winter";
@@ -67,11 +67,7 @@ function tickWinter(): void {
 	}
 }
 
+/** The winter starts in chapter 2, when Elsa flees (see story.ts). */
 export function registerWinter(): void {
-	world.afterEvents.entityHurt.subscribe((event) => {
-		if (event.hurtEntity.typeId === "frozen:elsa" && event.damageSource.damagingEntity instanceof Player) {
-			startWinter();
-		}
-	});
 	system.runInterval(tickWinter, EFFECT_INTERVAL);
 }

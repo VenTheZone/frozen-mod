@@ -113,6 +113,11 @@ export function duplicatesToRemove(characters: Placed[], radius: number): number
 	return remove.sort((a, b) => a - b);
 }
 
+/** Items (and how many more of each) the player still needs for a trade. Empty means they can afford it. */
+export function missingForTrade(have: Record<string, number>, wants: [string, number][]): [string, number][] {
+	return wants.filter(([id, n]) => (have[id] ?? 0) < n).map(([id, n]) => [id, n - (have[id] ?? 0)]);
+}
+
 /** Per-player, per-ability cooldown gate keyed by game tick. */
 export class Cooldowns {
 	private readonly readyAt = new Map<string, number>();

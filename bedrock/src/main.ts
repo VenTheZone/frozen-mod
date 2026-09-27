@@ -1,5 +1,6 @@
 import { system } from "@minecraft/server";
 import { registerCleanup } from "./cleanup.ts";
+import { registerDialogue } from "./dialogue.ts";
 import { gloveComponent, meltComponent } from "./powers.ts";
 import { registerSetup, storybookComponent } from "./setup.ts";
 import { spawnMarkerComponent } from "./spawns.ts";
@@ -14,6 +15,7 @@ system.beforeEvents.startup.subscribe(({ itemComponentRegistry, blockComponentRe
 });
 
 registerCleanup();
+registerDialogue();
 registerWinter();
 registerStory();
 registerSetup();

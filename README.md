@@ -49,10 +49,10 @@ The story is shared by everyone in the world.
 | Feature | How it works |
 | --- | --- |
 | Elsa's Glove | Use: ice blast. Sneak + use in the air: ice bridge (look up or down for stairs). Sneak + use on the ground: ring of ice spikes that knocks back and slows mobs. Conjured ice melts after 10–20 s. |
-| Elsa | Trades the glove, snowflake crystals and emeralds. Fights back with ice blasts. **Hitting her starts the Eternal Winter.** |
+| Elsa | Tap her and choose **Talk**. Her dialogue has a **Trade** button for the glove, snowflake crystals and emeralds. In chapter 2 she panics, flees and starts the Eternal Winter. |
 | Anna | Give her (or Elsa) an **Act of True Love** to end the Eternal Winter. |
-| Kristoff | Sells packed ice, blue ice and saddles, and buys carrots. |
-| Olaf | Tame him with carrots (his nose!). He follows you and sits when you interact with him. |
+| Kristoff | **Talk** to him, then **Trade** for packed ice, blue ice and saddles. He also buys carrots. |
+| Olaf | **Talk** to him when you're not holding a carrot. Feed him carrots (his nose!) to tame him, and he'll follow you. |
 | Sven | Tame him by riding or feeding carrots, then saddle and ride. |
 | Marshmallow | 200 HP boss with a boss bar: slowing slams and ice-blast volleys. Drops snowflake crystals. |
 | Eternal Winter | Snow piles up, water freezes and it keeps snowing around every player until true love thaws it. Survives restarts. |
@@ -73,7 +73,7 @@ Bedrock can't run in CI, so check these on a device after importing:
 - [ ] The storybook opens, and "Build Arendelle here" works in an existing world.
 - [ ] Chapters advance: Anna, Elsa (she flees, the winter starts), Kristoff, Olaf, the castle rising after 120 blocks, Marshmallow, crafting the heart, true love.
 - [ ] The glove fires blasts, builds a bridge or stairs, and summons spikes. The ice melts.
-- [ ] Hitting Elsa starts the winter. The Act of True Love on Anna or Elsa ends it.
+- [ ] Talk works on Anna, Elsa, Kristoff and Olaf, and they can't be hurt by players. Elsa's chapter starts the winter, and the Act of True Love on Anna or Elsa ends it.
 - [ ] Olaf tames with carrots. Sven can be tamed, saddled and ridden.
 - [ ] Marshmallow shows a boss bar and drops crystals.
 - [ ] `/structure load` of both structures spawns their characters. Naturally generated structures appear in new chunks.

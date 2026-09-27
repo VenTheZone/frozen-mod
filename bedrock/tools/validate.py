@@ -195,6 +195,20 @@ def main():
         for part in ("title", "goal", "hint"):
             if f"frozen.story.{chapter}.{part}" not in lang:
                 problem(f"missing lang key frozen.story.{chapter}.{part}")
+    dialogue = open(os.path.join(ROOT, "src", "dialogue.ts"), encoding="utf-8").read()
+    talkers = re.findall(r'"([a-z_]+)"', re.search(r"TALKERS = \[([^\]]*)\]", dialogue).group(1))
+    for name in talkers:
+        if f"frozen:{name}" not in bp_ids:
+            problem(f"dialogue talker {name} is not an entity")
+        for part in ("story", "default"):
+            if f"frozen.talk.{name}.{part}" not in lang:
+                problem(f"missing lang key frozen.talk.{name}.{part}")
+        interact = json.dumps(bp_ids.get(f"frozen:{name}", {}).get("minecraft:entity", {}).get("components", {}).get("minecraft:interact", {}))
+        if "frozen:talked" not in interact:
+            problem(f"frozen:{name} has no Talk interaction")
+    for label in re.findall(r'label: "([^"]+)"', dialogue):
+        if label not in lang:
+            problem(f"missing lang key {label}")
     spawn_eggs = {f"{eid}_spawn_egg" for eid, d in bp_ids.items() if d["minecraft:entity"]["description"].get("is_spawnable")}
     for kit_item in re.findall(r'\["(frozen:[a-z_]+)", \d+\]', scripts):
         if kit_item not in own_ids | spawn_eggs:
