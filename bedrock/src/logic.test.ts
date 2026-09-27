@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { bridgePath, Cooldowns, duplicatesToRemove, facingFromYaw, missingForTrade, snowAction, spikeRing } from "./logic.ts";
+import { bearingArrow, bridgePath, Cooldowns, duplicatesToRemove, facingFromYaw, missingForTrade, snowAction, spikeRing } from "./logic.ts";
 
 const has = (list: { x: number; y: number; z: number }[], x: number, y: number, z: number) =>
 	list.some((p) => p.x === x && p.y === y && p.z === z);
@@ -62,6 +62,16 @@ test("missingForTrade reports what is still needed", () => {
 	assert.deepEqual(missingForTrade({ "minecraft:emerald": 20, "minecraft:leather": 1 }, wants), []);
 	assert.deepEqual(missingForTrade({ "minecraft:emerald": 10 }, wants), [["minecraft:emerald", 6], ["minecraft:leather", 1]]);
 	assert.deepEqual(missingForTrade({}, []), []);
+});
+
+test("bearingArrow points relative to the player's view", () => {
+	const o = { x: 0, z: 0 };
+	assert.equal(bearingArrow(o, { x: 0, z: 10 }, 0), "↑"); // facing south, target south
+	assert.equal(bearingArrow(o, { x: 0, z: -10 }, 0), "↓"); // behind
+	assert.equal(bearingArrow(o, { x: -10, z: 0 }, 0), "→"); // west is on the right when facing south
+	assert.equal(bearingArrow(o, { x: 10, z: 0 }, 0), "←");
+	assert.equal(bearingArrow(o, { x: 10, z: 0 }, -90), "↑"); // facing east
+	assert.equal(bearingArrow(o, { x: -10, z: 10 }, 0), "↗");
 });
 
 test("cooldowns gate per key", () => {

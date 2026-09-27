@@ -11,19 +11,21 @@ export interface Chapter {
 	/** Lang keys: frozen.story.<id>.title / .goal / .hint */
 	id: string;
 	done: (event: StoryEvent) => boolean;
+	/** What the on-screen compass points at: the nearest of these characters, or "castle" for the Ice Palace. */
+	guide?: string[];
 }
 
 const talkTo = (entity: string) => (e: StoryEvent) => e.kind === "talk" && e.entity === entity;
 
 export const CHAPTERS: Chapter[] = [
-	{ id: "coronation", done: talkTo("frozen:anna") },
-	{ id: "let_it_go", done: talkTo("frozen:elsa") },
-	{ id: "ice_harvester", done: talkTo("frozen:kristoff") },
-	{ id: "warm_hugs", done: talkTo("frozen:olaf") },
-	{ id: "north_mountain", done: (e) => e.kind === "reach_castle" },
-	{ id: "marshmallow", done: (e) => e.kind === "kill" && e.entity === "frozen:marshmallow" },
+	{ id: "coronation", done: talkTo("frozen:anna"), guide: ["frozen:anna"] },
+	{ id: "let_it_go", done: talkTo("frozen:elsa"), guide: ["frozen:elsa"] },
+	{ id: "ice_harvester", done: talkTo("frozen:kristoff"), guide: ["frozen:kristoff"] },
+	{ id: "warm_hugs", done: talkTo("frozen:olaf"), guide: ["frozen:olaf"] },
+	{ id: "north_mountain", done: (e) => e.kind === "reach_castle", guide: ["castle"] },
+	{ id: "marshmallow", done: (e) => e.kind === "kill" && e.entity === "frozen:marshmallow", guide: ["frozen:marshmallow"] },
 	{ id: "frozen_heart", done: (e) => e.kind === "has_item" && e.item === "frozen:true_love_heart" },
-	{ id: "true_love", done: (e) => e.kind === "true_love" },
+	{ id: "true_love", done: (e) => e.kind === "true_love", guide: ["frozen:anna", "frozen:elsa"] },
 ];
 
 /** Blocks the player must travel from where chapter 5 starts before the Ice Castle rises. */

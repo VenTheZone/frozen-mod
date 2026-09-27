@@ -100,6 +100,10 @@
 						"swing": true
 					}
 				]
+			},
+			"minecraft:home": {
+				"restriction_type": "random_movement",
+				"restriction_radius": 10
 			}
 		},
 		"events": {

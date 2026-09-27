@@ -12,6 +12,20 @@ A *Frozen*-themed add-on for **Minecraft Bedrock Edition**, the version on phone
 
 It's a flat, snowy survival world. The town is built by plain function commands, so it works even without the scripting features.
 
+## Story world on the "Frozen Ghiacciata" map (local build)
+
+`bedrock/tools/gen_story_world.py` builds **Frozen - Arendelle Story** on top of the converted *Frozen Ghiacciata* map: a full kingdom with the castle island, the town and harbour, and the ice staircase up to Elsa's Ice Palace. The map is third-party work, so it is **not** included in this repository or its releases. The tool reads your own copy:
+
+```bash
+cd bedrock
+python3 tools/gen_story_world.py "/path/to/Frozen Ghiacciata (Bedrock).mcworld"   # -> dist/Frozen_Arendelle_Story.mcworld
+```
+
+It keeps the map untouched and adds the Frozen packs plus a setup pack that:
+- places the characters at surveyed spots: Anna in the courtyard, Elsa in the keep, Kristoff and Sven at the docks, Olaf at the foot of the ice staircase, Marshmallow at its top, and Elsa in the palace;
+- moves you to the courtyard and switches you to Survival once;
+- gives the map-specific story hints.
+
 ## Install as an add-on (phone or tablet)
 
 1. Download **`Frozen.mcaddon`** from the [latest release](https://github.com/VenTheZone/frozen-mod/releases/latest).

@@ -1,10 +1,10 @@
-import { EntityTypes, ItemCustomComponent, Player, system, world } from "@minecraft/server";
+import { EntityTypes, GameMode, ItemCustomComponent, Player, system, world } from "@minecraft/server";
 import { ActionFormData, MessageFormData } from "@minecraft/server-ui";
 import { placeStructure, spawnMarkersIn } from "./spawns.ts";
-import { announceChapter, currentChapter, currentChapterKey, give } from "./story.ts";
+import { announceChapter, currentChapter, currentChapterKey, give, storyText } from "./story.ts";
 import { CHAPTERS } from "./storyline.ts";
 
-const VERSION = "1.3.0";
+const VERSION = "1.4.0";
 /** Entity type defined only by the Frozen World's own pack; that world builds its own town and kit. */
 const WORLD_FLAG = "frozen_world:flag";
 
@@ -19,6 +19,12 @@ const NEW_WORLD_TICKS = 20 * 60 * 20;
 const BUILD_RETRIES = 40;
 const RETRY_TICKS = 60;
 const ARENDELLE = { name: "frozen:arendelle", size: { x: 33, y: 19, z: 33 }, foundation: 3, playerX: 19, playerZ: 16 };
+/** Storybook buttons that switch the player's own game mode; works without cheats. */
+const GAME_MODES: [string, GameMode][] = [
+	["frozen.storybook.survival", GameMode.Survival],
+	["frozen.storybook.creative", GameMode.Creative],
+	["frozen.storybook.adventure", GameMode.Adventure],
+];
 const KIT: [string, number][] = [
 	["frozen:storybook", 1],
 	["frozen:elsa_glove", 1],
@@ -111,18 +117,26 @@ async function showStorybook(player: Player): Promise<void> {
 			rawtext: [
 				{ translate: "frozen.storybook.progress", with: [String(Math.min(chapter + 1, CHAPTERS.length)), String(CHAPTERS.length)] },
 				{ text: "\n\n§l" },
-				{ translate: `frozen.story.${id}.title` },
+				storyText(id, "title"),
 				{ text: "§r\n" },
-				{ translate: `frozen.story.${id}.goal` },
+				storyText(id, "goal"),
 				{ text: "\n\n§7" },
-				{ translate: `frozen.story.${id}.hint` },
+				storyText(id, "hint"),
 			],
 		})
 		.button({ translate: "frozen.storybook.close" });
 	if (canBuild) form.button({ translate: "frozen.storybook.build" });
+	for (const [key] of GAME_MODES) form.button({ translate: key });
 
 	const response = await form.show(player);
-	if (!canBuild || response.canceled || response.selection !== 1) return;
+	if (response.canceled || response.selection === undefined || response.selection === 0) return;
+	const modeIndex = response.selection - (canBuild ? 2 : 1);
+	if (modeIndex >= 0) {
+		const [key, mode] = GAME_MODES[modeIndex];
+		player.setGameMode(mode);
+		player.sendMessage({ rawtext: [{ translate: "frozen.storybook.mode_set" }, { translate: key }] });
+		return;
+	}
 	const confirm = await new MessageFormData()
 		.title({ translate: "frozen.storybook.build" })
 		.body({ translate: "frozen.storybook.confirm" })

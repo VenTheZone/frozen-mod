@@ -3,8 +3,9 @@ import { ActionFormData } from "@minecraft/server-ui";
 import { missingForTrade } from "./logic.ts";
 import { give, storyEvent } from "./story.ts";
 
-/** Characters with a Talk button. Lang keys: frozen.talk.<name>.story (their chapter) and .default. */
+/** Characters with a Talk button. Lang keys: frozen.talk.<name>.story (their chapter) and .default.1..N. */
 const TALKERS = ["anna", "elsa", "kristoff", "olaf"];
+const DEFAULT_LINES = 3;
 const CARROT = "minecraft:carrot";
 /** The Talk interaction and its entity event can both report the same tap; handle it once. */
 const DEDUPE_TICKS = 5;
@@ -80,7 +81,7 @@ async function talk(player: Player, target: Entity): Promise<void> {
 	const advanced = storyEvent(player, { kind: "talk", entity: target.typeId });
 	const form = new ActionFormData()
 		.title({ translate: `entity.${target.typeId}.name` })
-		.body({ translate: `frozen.talk.${name}.${advanced ? "story" : "default"}` });
+		.body({ translate: `frozen.talk.${name}.${advanced ? "story" : `default.${1 + Math.floor(Math.random() * DEFAULT_LINES)}`}` });
 	const canTrade = OFFERS[name] !== undefined;
 	if (canTrade) form.button({ translate: "frozen.dialogue.trade" });
 	form.button({ translate: "frozen.dialogue.bye" });

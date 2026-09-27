@@ -62,6 +62,46 @@ def write_payload(out, value):
         out += bytes([TAG_END])
 
 
+def read_typed(data):
+    """Reads a little-endian NBT root back into the typed values above, so it can be edited and rewritten."""
+    pos = 0
+
+    def take(fmt):
+        nonlocal pos
+        value = struct.unpack_from("<" + fmt, data, pos)[0]
+        pos += struct.calcsize("<" + fmt)
+        return value
+
+    def string():
+        nonlocal pos
+        n = take("H")
+        s = data[pos:pos + n].decode("utf-8")
+        pos += n
+        return s
+
+    def payload(tag):
+        if tag == TAG_BYTE: return Byte(take("b"))
+        if tag == TAG_INT: return Int(take("i"))
+        if tag == TAG_LONG: return Long(take("q"))
+        if tag == TAG_FLOAT: return Float(take("f"))
+        if tag == TAG_STRING: return String(string())
+        if tag == TAG_LIST:
+            inner, n = take("b"), take("i")
+            return NbtList(inner, [payload(inner) for _ in range(n)])
+        if tag == TAG_COMPOUND:
+            out = {}
+            while True:
+                t = take("B")
+                if t == TAG_END: return out
+                name = string()
+                out[name] = payload(t)
+        raise ValueError(f"unsupported NBT tag {tag}")
+
+    assert take("B") == TAG_COMPOUND
+    string()
+    return payload(TAG_COMPOUND)
+
+
 def write_named(out, name, value):
     raw = name.encode("utf-8")
     out += bytes([tag_of(value)]) + struct.pack("<H", len(raw)) + raw

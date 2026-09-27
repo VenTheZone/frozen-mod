@@ -18,10 +18,10 @@ import gen_structures as gs  # noqa: E402
 
 ROOT = os.path.normpath(os.path.join(HERE, ".."))
 DIST = os.path.join(ROOT, "dist")
-WORLD_NAME = "Frozen - Kingdom of Arendelle (v1.3.0)"
+WORLD_NAME = "Frozen - Kingdom of Arendelle (v1.4.0)"
 WORLD_BP_UUID = "5b1f7c9e-2d4a-4f3b-9e8c-7a6d5c4b3a21"
 WORLD_BP_MODULE_UUID = "8e2d4c6a-1b3f-4a5e-9c7d-2f4e6a8c0b13"
-WORLD_BP_VERSION = [1, 0, 2]
+WORLD_BP_VERSION = [1, 0, 3]
 PACK_DIRS = {"behavior_pack": ("behavior_packs", "Frozen_BP"), "resource_pack": ("resource_packs", "Frozen_RP")}
 
 # Flat world: bedrock at y=-64, dirt -63..-62, snow at -61, so the floor of every building is y=-60.
@@ -61,6 +61,15 @@ def world_pos(structure, origin, rotation, x, y, z):
     if rotation == "180_degrees":
         x, z = w - 1 - x, d - 1 - z
     return origin[0] + x, origin[1] + structure.base + y, origin[2] + z
+
+
+FLAG_ENTITY = {
+    "format_version": "1.21.90",
+    "minecraft:entity": {
+        "description": {"identifier": "frozen_world:flag", "is_spawnable": False, "is_summonable": False},
+        "components": {},
+    },
+}
 
 
 def summon(character, x, y, z):
@@ -151,7 +160,7 @@ def main():
     world_manifest = {
         "format_version": 2,
         "header": {
-            "name": "Frozen v1.3.0 - World Setup",
+            "name": "Frozen v1.4.0 - World Setup",
             "description": "Builds Arendelle and the Ice Castle when this world first loads.",
             "uuid": WORLD_BP_UUID, "version": WORLD_BP_VERSION, "min_engine_version": [1, 21, 90],
         },
@@ -179,13 +188,7 @@ def main():
         zf.write(os.path.join(ROOT, "behavior_pack", "pack_icon.png"), world_bp + "pack_icon.png")
         zf.writestr(world_bp + "functions/tick.json", json.dumps({"values": ["frozen_world/tick"]}, indent=2))
         # Exists only in this world, so the add-on's scripts can reliably tell they must not build a second town.
-        zf.writestr(world_bp + "entities/flag.json", json.dumps({
-            "format_version": "1.21.90",
-            "minecraft:entity": {
-                "description": {"identifier": "frozen_world:flag", "is_spawnable": False, "is_summonable": False},
-                "components": {},
-            },
-        }, indent=2))
+        zf.writestr(world_bp + "entities/flag.json", json.dumps(FLAG_ENTITY, indent=2))
         for name, lines in functions(places).items():
             zf.writestr(f"{world_bp}functions/{name}.mcfunction", "\n".join(lines) + "\n")
         for name, data in staging_structures.items():

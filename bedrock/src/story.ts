@@ -22,10 +22,22 @@ export function currentChapterKey(): string {
 	return chapterId(currentChapter()) ?? "complete";
 }
 
+/** Worlds built on the Ghiacciata map set map=1 on the frozen_world scoreboard to get place-specific hints. */
+function onArendelleMap(): boolean {
+	return world.scoreboard.getObjective("frozen_world")?.getScore("map") === 1;
+}
+
+/** Story text for a chapter part, using the map-specific variant (.arendelle) for hints and the palace goal. */
+export function storyText(id: string, part: "title" | "goal" | "hint"): RawMessage {
+	const key = `frozen.story.${id}.${part}`;
+	const hasVariant = part === "hint" || (part === "goal" && id === "north_mountain");
+	return { translate: hasVariant && onArendelleMap() ? `${key}.arendelle` : key };
+}
+
 export function announceChapter(target?: Player): void {
 	const id = currentChapterKey();
-	const title: RawMessage = { translate: `frozen.story.${id}.title` };
-	const goal: RawMessage = { translate: `frozen.story.${id}.goal` };
+	const title = storyText(id, "title");
+	const goal = storyText(id, "goal");
 	for (const player of target ? [target] : world.getAllPlayers()) {
 		player.onScreenDisplay.setTitle(title, { subtitle: goal, fadeInDuration: 10, stayDuration: 80, fadeOutDuration: 20 });
 		player.sendMessage({ rawtext: [{ text: "§b" }, title, { text: "§r - " }, goal] });
@@ -116,8 +128,13 @@ function worldCastle(): Vector3 | undefined {
 	return x === undefined || z === undefined ? undefined : { x, y: 0, z };
 }
 
+/** Where the Ice Palace/Castle for chapter 5 is, once known. */
+export function storyCastle(): Vector3 | undefined {
+	return worldCastle() ?? (world.getDynamicProperty(CASTLE_KEY) as Vector3 | undefined);
+}
+
 function journeyToCastle(player: Player): void {
-	const castle = worldCastle() ?? (world.getDynamicProperty(CASTLE_KEY) as Vector3 | undefined);
+	const castle = storyCastle();
 	if (castle) {
 		if (horizontalDistance(player.location, castle) <= CASTLE_REACH_DISTANCE) storyEvent(player, { kind: "reach_castle" });
 		return;

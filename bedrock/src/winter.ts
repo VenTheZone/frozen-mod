@@ -53,7 +53,6 @@ function tickWinter(): void {
 		overworld.setWeather(WeatherType.Rain, WEATHER_TICKS);
 	}
 	for (const player of overworld.getPlayers()) {
-		player.onScreenDisplay.setActionBar({ translate: "frozen.winter.active" });
 		for (let i = 0; i < ATTEMPTS_PER_PLAYER; i++) {
 			const x = Math.floor(player.location.x) + Math.floor(Math.random() * (RADIUS * 2 + 1)) - RADIUS;
 			const z = Math.floor(player.location.z) + Math.floor(Math.random() * (RADIUS * 2 + 1)) - RADIUS;
