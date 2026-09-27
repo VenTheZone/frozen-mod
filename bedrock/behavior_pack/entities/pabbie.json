@@ -2,7 +2,7 @@
 	"format_version": "1.21.90",
 	"minecraft:entity": {
 		"description": {
-			"identifier": "frozen:kristoff",
+			"identifier": "frozen:pabbie",
 			"is_spawnable": true,
 			"is_summonable": true
 		},
@@ -10,7 +10,7 @@
 			"minecraft:type_family": {
 				"family": [
 					"frozen_npc",
-					"kristoff",
+					"pabbie",
 					"mob"
 				]
 			},
@@ -53,6 +53,9 @@
 			},
 			"minecraft:behavior.random_look_around": {
 				"priority": 9
+			},
+			"minecraft:scale": {
+				"value": 0.75
 			},
 			"minecraft:interact": {
 				"interactions": [

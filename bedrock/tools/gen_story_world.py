@@ -23,27 +23,45 @@ import gen_world as gw  # noqa: E402
 DEFAULT_BASE = "/sdcard/Download/Frozen Ghiacciata (Bedrock).mcworld"
 DOWNLOADS = "/sdcard/Download"
 OUT_NAME = "FROZEN_STORY_Ghiacciata_Kingdom.mcworld"
-WORLD_NAME = "★ Frozen STORY - Ghiacciata Kingdom (big map)"
+WORLD_NAME = "★ Frozen STORY - Ghiacciata Kingdom (big map, v2.0.0)"
 SETUP_UUID = "3c7e9a1f-6b2d-4e8a-a5c3-9d1f7b2e4c60"
 SETUP_MODULE_UUID = "7a4d2c8e-1f3b-4c9a-b6e5-2d8f0a3c1e97"
-SETUP_VERSION = [1, 0, 0]
+SETUP_VERSION = [2, 0, 0]
 
 # Surveyed on the map: (x, y, z) is the air block a character stands in.
 SPAWN = (145, 41, 25)  # castle courtyard, open sky, cobblestone floor at y=40
 CHARACTERS = [
-    ("anna", 130, 41, 25),         # castle courtyard
-    ("elsa", 112, 42, 23),         # castle keep, ground floor behind the east doors
-    ("kristoff", 300, 37, 60),     # harbour docks in town
-    ("sven", 304, 37, 58),         # docks, next to Kristoff
+    # castle island
+    ("anna", 130, 41, 25),         # courtyard, beside the spawn
+    ("hans", 137, 41, 5),          # north side of the courtyard
+    ("duke", 156, 41, 5),
+    ("elsa", 112, 42, 23),         # keep, ground floor behind the east doors
+    ("kai", 112, 42, 20),
+    ("gerda", 112, 42, 26),
+    ("guard", 178, 42, 16),        # east gate onto the bridge
+    ("guard", 182, 41, 18),
+    # town streets
+    *[("townsfolk", x, y, z) for x, z, y in [(267, -75, 47), (256, -60, 43), (298, -60, 43), (271, -57, 43), (267, -43, 42), (305, -42, 43),
+                                              (322, -41, 42), (281, -38, 42), (294, -32, 41), (308, -28, 41), (276, -24, 41), (289, -18, 41)]],
+    # Wandering Oaken's Trading Post, on the boardwalk by the southern village
+    ("oaken", 183, 37, 211),
+    ("kristoff", 201, 37, 209),
+    ("sven", 206, 37, 209),
+    # the North Mountain
     ("olaf", 371, 81, -270),       # foot of the ice staircase
-    ("marshmallow", 373, 104, -318),  # top of the ice staircase, guarding the palace
+    ("marshmallow", 373, 104, -318),  # top of the staircase, guarding the palace
     ("elsa", 372, 128, -348),      # Ice Palace hall
+    # troll valley in the foothills west of the mountain
+    ("pabbie", 344, 62, -189),
+    ("troll", 348, 63, -205), ("troll", 347, 63, -201), ("troll", 340, 63, -190), ("troll", 348, 62, -188),
 ]
-PALACE = (373, -320)  # chapter 5 is reached at the top of the staircase
-GOALS = {0: (130, 25), 1: (112, 23), 2: (300, 60), 3: (371, -270), 4: PALACE, 5: (373, -318), 7: (130, 25)}
-TICKING = [("frozen_castle", 125, 40, 25, 2), ("frozen_docks", 300, 36, 60, 1),
-           ("frozen_olaf", 371, 80, -270, 1), ("frozen_palace", 373, 110, -330, 2)]
-KIT = gw.KIT
+PALACE = (373, -320)  # top of the staircase
+# compass fallback per chapter index (see src/storyline.ts)
+GOALS = {0: (130, 25), 1: (137, 5), 2: (112, 23), 3: (201, 209), 4: (371, -270), 5: (372, -348), 6: (373, -318),
+         7: (344, -189), 9: (137, 5), 10: (130, 25)}
+TICKING = [("frozen_castle", 150, 40, 20, 3), ("frozen_town", 290, 42, -45, 2), ("frozen_oaken", 195, 36, 210, 1),
+           ("frozen_olaf", 371, 80, -270, 1), ("frozen_trolls", 345, 62, -195, 1), ("frozen_palace", 373, 110, -330, 2)]
+
 
 
 def functions():
@@ -65,8 +83,6 @@ def functions():
         "gamemode survival @a[tag=!frozen_arrived]",
         "tag @a[tag=!frozen_arrived] add frozen_arrived",
     ]
-    tick += [f"give @a[tag=!frozen_kit] {item} {amount}" for item, amount in KIT]
-    tick.append("tag @a[tag=!frozen_kit] add frozen_kit")
 
     place = [gw.summon(c, x, y, z) for c, x, y, z in CHARACTERS]
     place += [f"scoreboard players set castle_x frozen_world {PALACE[0]}", f"scoreboard players set castle_z frozen_world {PALACE[1]}"]

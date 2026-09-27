@@ -2,16 +2,16 @@
 	"format_version": "1.10.0",
 	"minecraft:client_entity": {
 		"description": {
-			"identifier": "frozen:elsa",
+			"identifier": "frozen:guard",
 			"spawn_egg": {
-				"base_color": "#b4dcf5",
-				"overlay_color": "#f0ebc8"
+				"base_color": "#50286e",
+				"overlay_color": "#c8a040"
 			},
 			"materials": {
 				"default": "entity_alphatest"
 			},
 			"textures": {
-				"default": "textures/entity/elsa"
+				"default": "textures/entity/guard"
 			},
 			"geometry": {
 				"default": "geometry.humanoid.custom"

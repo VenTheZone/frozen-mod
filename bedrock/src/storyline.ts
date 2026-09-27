@@ -1,9 +1,8 @@
-// The Frozen storyline as pure data, so the chapter flow can be unit tested without the game.
+// The Frozen campaign as pure data, so the chapter flow can be unit tested without the game.
 
 export type StoryEvent =
 	| { kind: "talk"; entity: string }
 	| { kind: "kill"; entity: string }
-	| { kind: "reach_castle" }
 	| { kind: "has_item"; item: string }
 	| { kind: "true_love" };
 
@@ -11,27 +10,31 @@ export interface Chapter {
 	/** Lang keys: frozen.story.<id>.title / .goal / .hint */
 	id: string;
 	done: (event: StoryEvent) => boolean;
-	/** What the on-screen compass points at: the nearest of these characters, or "castle" for the Ice Palace. */
+	/** Short goal for the always-visible sidebar tracker (English: scoreboard text can't be translated). */
+	tracker: string;
+	/** What the compass points at: the nearest of these characters, or "castle" for the Ice Palace. */
 	guide?: string[];
 }
 
 const talkTo = (entity: string) => (e: StoryEvent) => e.kind === "talk" && e.entity === entity;
+const defeat = (entity: string) => (e: StoryEvent) => e.kind === "kill" && e.entity === entity;
 
 export const CHAPTERS: Chapter[] = [
-	{ id: "coronation", done: talkTo("frozen:anna"), guide: ["frozen:anna"] },
-	{ id: "let_it_go", done: talkTo("frozen:elsa"), guide: ["frozen:elsa"] },
-	{ id: "ice_harvester", done: talkTo("frozen:kristoff"), guide: ["frozen:kristoff"] },
-	{ id: "warm_hugs", done: talkTo("frozen:olaf"), guide: ["frozen:olaf"] },
-	{ id: "north_mountain", done: (e) => e.kind === "reach_castle", guide: ["castle"] },
-	{ id: "marshmallow", done: (e) => e.kind === "kill" && e.entity === "frozen:marshmallow", guide: ["frozen:marshmallow"] },
-	{ id: "frozen_heart", done: (e) => e.kind === "has_item" && e.item === "frozen:true_love_heart" },
-	{ id: "true_love", done: (e) => e.kind === "true_love", guide: ["frozen:anna", "frozen:elsa"] },
+	{ id: "coronation", done: talkTo("frozen:anna"), tracker: "Talk to Anna", guide: ["frozen:anna"] },
+	{ id: "open_door", done: talkTo("frozen:hans"), tracker: "Meet Prince Hans", guide: ["frozen:hans"] },
+	{ id: "let_it_go", done: talkTo("frozen:elsa"), tracker: "Talk to Queen Elsa", guide: ["frozen:elsa"] },
+	{ id: "oakens", done: talkTo("frozen:kristoff"), tracker: "Find Kristoff at Oaken's", guide: ["frozen:kristoff"] },
+	{ id: "in_summer", done: talkTo("frozen:olaf"), tracker: "Meet Olaf", guide: ["frozen:olaf"] },
+	{ id: "north_mountain", done: talkTo("frozen:elsa"), tracker: "Find Elsa at the Ice Palace", guide: ["frozen:elsa", "castle"] },
+	{ id: "marshmallow", done: defeat("frozen:marshmallow"), tracker: "Defeat Marshmallow", guide: ["frozen:marshmallow"] },
+	{ id: "fixer_upper", done: talkTo("frozen:pabbie"), tracker: "Visit the trolls", guide: ["frozen:pabbie"] },
+	{ id: "frozen_heart", done: (e) => e.kind === "has_item" && e.item === "frozen:true_love_heart", tracker: "Craft an Act of True Love" },
+	{ id: "hans_betrayal", done: defeat("frozen:hans"), tracker: "Stop Prince Hans", guide: ["frozen:hans"] },
+	{ id: "true_love", done: (e) => e.kind === "true_love", tracker: "Give true love to Anna or Elsa", guide: ["frozen:anna", "frozen:elsa"] },
 ];
 
-/** Blocks the player must travel from where chapter 5 starts before the Ice Castle rises. */
+/** Blocks the player must travel before an Ice Palace rises (worlds without one). */
 export const CASTLE_TRAVEL_DISTANCE = 120;
-/** How close counts as having reached the castle. */
-export const CASTLE_REACH_DISTANCE = 16;
 
 export function isComplete(chapter: number): boolean {
 	return chapter >= CHAPTERS.length;
@@ -39,6 +42,10 @@ export function isComplete(chapter: number): boolean {
 
 export function chapterId(chapter: number): string | undefined {
 	return CHAPTERS[chapter]?.id;
+}
+
+export function chapterIndex(id: string): number {
+	return CHAPTERS.findIndex((c) => c.id === id);
 }
 
 /** Returns the next chapter index if the event completes the current chapter, otherwise the same index. */

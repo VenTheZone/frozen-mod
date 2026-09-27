@@ -2,16 +2,16 @@
 	"format_version": "1.10.0",
 	"minecraft:client_entity": {
 		"description": {
-			"identifier": "frozen:elsa",
+			"identifier": "frozen:gerda",
 			"spawn_egg": {
-				"base_color": "#b4dcf5",
-				"overlay_color": "#f0ebc8"
+				"base_color": "#28463c",
+				"overlay_color": "#f0f0f0"
 			},
 			"materials": {
 				"default": "entity_alphatest"
 			},
 			"textures": {
-				"default": "textures/entity/elsa"
+				"default": "textures/entity/gerda"
 			},
 			"geometry": {
 				"default": "geometry.humanoid.custom"

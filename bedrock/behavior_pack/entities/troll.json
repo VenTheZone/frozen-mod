@@ -2,7 +2,7 @@
 	"format_version": "1.21.90",
 	"minecraft:entity": {
 		"description": {
-			"identifier": "frozen:kristoff",
+			"identifier": "frozen:troll",
 			"is_spawnable": true,
 			"is_summonable": true
 		},
@@ -10,7 +10,7 @@
 			"minecraft:type_family": {
 				"family": [
 					"frozen_npc",
-					"kristoff",
+					"troll",
 					"mob"
 				]
 			},
@@ -53,6 +53,17 @@
 			},
 			"minecraft:behavior.random_look_around": {
 				"priority": 9
+			},
+			"minecraft:scale": {
+				"value": 0.6
+			},
+			"minecraft:behavior.random_stroll": {
+				"priority": 8,
+				"speed_multiplier": 0.5
+			},
+			"minecraft:home": {
+				"restriction_type": "random_movement",
+				"restriction_radius": 4
 			},
 			"minecraft:interact": {
 				"interactions": [

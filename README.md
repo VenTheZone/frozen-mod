@@ -43,18 +43,26 @@ It keeps the map untouched and adds the Frozen packs plus a setup pack that:
 - **Starter kit** (once per player): Frozen Storybook, Elsa's Glove, 3 snowflake crystals, 8 carrots and an Olaf spawn egg.
 - More Ice Castles and Arendelles also generate in unexplored snowy land.
 
-### The story
+### The campaign
 
-Open the **Frozen Storybook** at any time to see your current chapter, goal and a hint.
+A Telltale-style story in 11 chapters. **Tap a character and choose Talk** to open a conversation, then pick what to say. Your choices change relationships ("Anna will remember that."), open or close later dialogue options, and shape the ending, which finishes with a recap of the choices you made.
 
-1. **Coronation Day:** talk to Anna in Arendelle.
-2. **Let It Go:** talk to Queen Elsa. She panics, flees, and the Eternal Winter begins.
-3. **Reindeers Are Better Than People:** find Kristoff (he gives you carrots).
-4. **In Summer:** give Olaf a carrot.
-5. **The North Mountain:** travel 120 blocks and the Ice Castle rises ahead of you.
-6. **Marshmallow:** defeat the castle's guardian.
-7. **A Frozen Heart:** craft an Act of True Love.
-8. **An Act of True Love:** give it to Anna or Elsa to bring summer back.
+1. **Coronation Day:** meet Anna.
+2. **Love Is an Open Door:** meet Prince Hans. Trust him or not.
+3. **Let It Go:** talk to Queen Elsa. Her powers break loose, she flees, and the Eternal Winter begins.
+4. **Wandering Oaken's:** find Kristoff at Oaken's Trading Post.
+5. **In Summer:** meet Olaf, who follows you from then on.
+6. **The North Mountain:** find Elsa at her Ice Palace. Her ice strikes your heart.
+7. **Marshmallow:** defeat the palace guardian while your frozen heart slows you.
+8. **Fixer Upper:** Grand Pabbie and the trolls explain the act of true love.
+9. **A Frozen Heart:** craft an Act of True Love.
+10. **Hans's Betrayal:** Hans shows his true colours. Defeat him.
+11. **An Act of True Love:** give it to Anna or Elsa to bring summer back.
+
+- **Quest tracker:** a sidebar always shows your chapter and goal, and a compass at the bottom of the screen points to it.
+- **Starter chest:** on first spawn, a chest appears beside you with a bed, sword, shield, tools, food, torches and leather armor, plus the Frozen Storybook.
+- **Frozen Storybook:** your current goal, hints, relationships (hearts), and buttons to switch game mode.
+- **Cast:** Anna, Elsa, Kristoff, Sven, Olaf, Hans, the Duke of Weselton, Oaken, Kai, Gerda, Grand Pabbie, trolls, royal guards and townsfolk (townsfolk use Minecraft's built-in NPC skins). Story characters stay at their posts.
 
 The story is shared by everyone in the world.
 

@@ -12,6 +12,8 @@ ROOT = os.path.normpath(os.path.join(HERE, ".."))
 BP = os.path.join(ROOT, "behavior_pack")
 RP = os.path.join(ROOT, "resource_pack")
 OWN_TEXTURE_DIRS = ("textures/entity/", "textures/item/", "textures/block/", "textures/models/armor/")
+# Built into Minecraft, referenced by path.
+VANILLA_TEXTURES = ("textures/entity/npc/",)
 
 problems = []
 
@@ -119,7 +121,7 @@ def main():
     for eid, d in rp_ids.items():
         desc = d["minecraft:client_entity"]["description"]
         for tex in desc.get("textures", {}).values():
-            if tex.startswith(OWN_TEXTURE_DIRS) and not texture_exists(tex):
+            if tex.startswith(OWN_TEXTURE_DIRS) and not tex.startswith(VANILLA_TEXTURES) and not texture_exists(tex):
                 problem(f"{eid}: missing texture {tex}.png")
         for rc in desc.get("render_controllers", []):
             name = rc if isinstance(rc, str) else next(iter(rc))
@@ -195,25 +197,17 @@ def main():
         for part in ("title", "goal", "hint"):
             if f"frozen.story.{chapter}.{part}" not in lang:
                 problem(f"missing lang key frozen.story.{chapter}.{part}")
-    dialogue = open(os.path.join(ROOT, "src", "dialogue.ts"), encoding="utf-8").read()
-    talkers = re.findall(r'"([a-z_]+)"', re.search(r"TALKERS = \[([^\]]*)\]", dialogue).group(1))
+    conversation = open(os.path.join(ROOT, "src", "conversation.ts"), encoding="utf-8").read()
+    talkers = re.findall(r'"([a-z_]+)"', re.search(r"TALKERS = \[([^\]]*)\]", conversation).group(1))
     for name in talkers:
-        if f"frozen:{name}" not in bp_ids:
-            problem(f"dialogue talker {name} is not an entity")
-        for part in ("story", "default.1", "default.2", "default.3"):
-            if f"frozen.talk.{name}.{part}" not in lang:
-                problem(f"missing lang key frozen.talk.{name}.{part}")
-        interact = json.dumps(bp_ids.get(f"frozen:{name}", {}).get("minecraft:entity", {}).get("components", {}).get("minecraft:interact", {}))
-        if "frozen:talked" not in interact:
+        entity = bp_ids.get(f"frozen:{name}")
+        if not entity:
+            problem(f"talker {name} is not an entity")
+        elif "frozen:talked" not in json.dumps(entity):
             problem(f"frozen:{name} has no Talk interaction")
-    for label in re.findall(r'label: "([^"]+)"', dialogue):
-        if label not in lang:
-            problem(f"missing lang key {label}")
     for chapter in re.findall(r'\{ id: "([a-z_]+)"', storyline) + ["complete"]:
         if f"frozen.story.{chapter}.hint.arendelle" not in lang:
             problem(f"missing lang key frozen.story.{chapter}.hint.arendelle")
-    if "frozen.story.north_mountain.goal.arendelle" not in lang:
-        problem("missing lang key frozen.story.north_mountain.goal.arendelle")
     spawn_eggs = {f"{eid}_spawn_egg" for eid, d in bp_ids.items() if d["minecraft:entity"]["description"].get("is_spawnable")}
     for kit_item in re.findall(r'\["(frozen:[a-z_]+)", \d+\]', scripts):
         if kit_item not in own_ids | spawn_eggs:

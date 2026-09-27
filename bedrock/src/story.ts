@@ -1,16 +1,23 @@
 import { EquipmentSlot, GameMode, ItemStack, ItemTypes, Player, RawMessage, system, Vector3, world } from "@minecraft/server";
+import { ActionFormData } from "@minecraft/server-ui";
+import { choicesRecap, endingLines } from "./campaign.ts";
+import { EMPTY_STATE } from "./conversation-logic.ts";
+import type { StoryState } from "./conversation-logic.ts";
 import { placeStructure, spawnMarkersIn } from "./spawns.ts";
-import { advance, CASTLE_REACH_DISTANCE, CASTLE_TRAVEL_DISTANCE, chapterId, CHAPTERS, horizontalDistance } from "./storyline.ts";
+import { advance, CASTLE_TRAVEL_DISTANCE, chapterId, CHAPTERS, horizontalDistance } from "./storyline.ts";
 import type { StoryEvent } from "./storyline.ts";
-import { endWinter, isWinterActive, startWinter } from "./winter.ts";
+import { endWinter, isWinterActive } from "./winter.ts";
 
 const CHAPTER_KEY = "frozen:story_chapter";
+const STATE_KEY = "frozen:story_state";
 const JOURNEY_KEY = "frozen:journey_start";
 const CASTLE_KEY = "frozen:story_castle";
+const FROZEN_HEART_KEY = "frozen:frozen_heart";
 const HEART = "frozen:true_love_heart";
 const CURERS = new Set(["frozen:elsa", "frozen:anna"]);
 const CASTLE = { name: "frozen:ice_castle", size: { x: 17, y: 38, z: 17 }, foundation: 4, half: 8, ahead: 40 };
 const STORY_INTERVAL = 40;
+const CURSE_TICKS = 260;
 
 export function currentChapter(): number {
 	const value = world.getDynamicProperty(CHAPTER_KEY);
@@ -22,24 +29,39 @@ export function currentChapterKey(): string {
 	return chapterId(currentChapter()) ?? "complete";
 }
 
+export function storyState(): StoryState {
+	const raw = world.getDynamicProperty(STATE_KEY);
+	if (typeof raw !== "string") return EMPTY_STATE;
+	try {
+		const parsed = JSON.parse(raw) as StoryState;
+		return { flags: parsed.flags ?? [], rel: parsed.rel ?? {} };
+	} catch {
+		return EMPTY_STATE;
+	}
+}
+
+export function saveStoryState(state: StoryState): void {
+	world.setDynamicProperty(STATE_KEY, JSON.stringify(state));
+}
+
 /** Worlds built on the Ghiacciata map set map=1 on the frozen_world scoreboard to get place-specific hints. */
 function onArendelleMap(): boolean {
 	return world.scoreboard.getObjective("frozen_world")?.getScore("map") === 1;
 }
 
-/** Story text for a chapter part, using the map-specific variant (.arendelle) for hints and the palace goal. */
+/** Story text for a chapter part, using the map-specific variant (.arendelle) for hints. */
 export function storyText(id: string, part: "title" | "goal" | "hint"): RawMessage {
 	const key = `frozen.story.${id}.${part}`;
-	const hasVariant = part === "hint" || (part === "goal" && id === "north_mountain");
-	return { translate: hasVariant && onArendelleMap() ? `${key}.arendelle` : key };
+	return { translate: part === "hint" && onArendelleMap() ? `${key}.arendelle` : key };
 }
 
+/** The one announcement per chapter: a title on screen and a single chat line. */
 export function announceChapter(target?: Player): void {
 	const id = currentChapterKey();
 	const title = storyText(id, "title");
 	const goal = storyText(id, "goal");
 	for (const player of target ? [target] : world.getAllPlayers()) {
-		player.onScreenDisplay.setTitle(title, { subtitle: goal, fadeInDuration: 10, stayDuration: 80, fadeOutDuration: 20 });
+		player.onScreenDisplay.setTitle(title, { subtitle: goal, fadeInDuration: 10, stayDuration: 120, fadeOutDuration: 20 });
 		player.sendMessage({ rawtext: [{ text: "§b" }, title, { text: "§r - " }, goal] });
 	}
 }
@@ -56,49 +78,46 @@ export function give(player: Player, typeId: string, amount = 1): boolean {
 	return true;
 }
 
-/** Advances the story if the event finishes the current chapter. Returns true when it did. */
-export function storyEvent(player: Player, event: StoryEvent): boolean {
-	const before = currentChapter();
-	const after = advance(before, event);
-	if (after === before) return false;
-	world.setDynamicProperty(CHAPTER_KEY, after);
-	completeChapter(CHAPTERS[before].id, player);
-	system.runTimeout(() => announceChapter(), 40);
-	return true;
-}
-
-function completeChapter(id: string, player: Player): void {
-	switch (id) {
-		case "let_it_go":
-			system.runTimeout(() => elsaFlees(player), 60);
-			break;
-		case "ice_harvester":
-			give(player, "minecraft:carrot", 16);
-			break;
-		case "warm_hugs":
-			world.setDynamicProperty(JOURNEY_KEY, player.location);
-			break;
-		case "true_love":
-			give(player, "frozen:snowflake_crystal", 8);
-			break;
-	}
-}
-
-function elsaFlees(player: Player): void {
-	if (!player.isValid) return;
-	const [elsa] = player.dimension.getEntities({ type: "frozen:elsa", location: player.location, maxDistance: 16, closest: 1 });
-	elsa?.remove();
-	world.sendMessage({ translate: "frozen.story.elsa_fled" });
-	startWinter();
-}
-
-function hasItem(player: Player, typeId: string): boolean {
+export function hasItem(player: Player, typeId: string): boolean {
 	const container = player.getComponent("minecraft:inventory")?.container;
 	if (!container) return false;
 	for (let slot = 0; slot < container.size; slot++) {
 		if (container.getItem(slot)?.typeId === typeId) return true;
 	}
 	return false;
+}
+
+/** Advances the story if the event finishes the current chapter. Returns true when it did. */
+export function storyEvent(player: Player, event: StoryEvent): boolean {
+	const before = currentChapter();
+	const after = advance(before, event);
+	if (after === before) return false;
+	world.setDynamicProperty(CHAPTER_KEY, after);
+	if (CHAPTERS[before].id === "true_love") {
+		system.runTimeout(() => void showEnding(player), 20);
+	} else {
+		system.runTimeout(() => announceChapter(), 30);
+	}
+	return true;
+}
+
+/** Elsa's blast in chapter 6: slowness and weakness until an act of true love. */
+export function freezeHeart(player: Player): void {
+	player.setDynamicProperty(FROZEN_HEART_KEY, true);
+	applyCurse(player);
+}
+
+function applyCurse(player: Player): void {
+	player.addEffect("slowness", CURSE_TICKS, { amplifier: 0, showParticles: false });
+	player.addEffect("weakness", CURSE_TICKS, { amplifier: 0, showParticles: false });
+}
+
+async function showEnding(player: Player): Promise<void> {
+	const state = storyState();
+	const recap = choicesRecap(state);
+	player.onScreenDisplay.setTitle({ translate: "frozen.story.complete.title" }, { subtitle: { translate: "frozen.story.complete.goal" }, fadeInDuration: 10, stayDuration: 100, fadeOutDuration: 20 });
+	const body = [...endingLines(state), "", "§lYour choices§r", ...(recap.length ? recap : ["You kept your thoughts to yourself."])].join("\n\n");
+	await new ActionFormData().title("The End").body(body).button("Thank you for playing!").show(player);
 }
 
 function raiseCastleAhead(player: Player): void {
@@ -120,7 +139,7 @@ function raiseCastleAhead(player: Player): void {
 	}
 }
 
-/** The Frozen World's setup functions record where they built the Ice Castle. */
+/** The Frozen World's setup functions record where they built the Ice Palace. */
 function worldCastle(): Vector3 | undefined {
 	const scores = world.scoreboard.getObjective("frozen_world");
 	const x = scores?.getScore("castle_x");
@@ -128,17 +147,14 @@ function worldCastle(): Vector3 | undefined {
 	return x === undefined || z === undefined ? undefined : { x, y: 0, z };
 }
 
-/** Where the Ice Palace/Castle for chapter 5 is, once known. */
+/** Where the Ice Palace for chapter 6 is, once known. */
 export function storyCastle(): Vector3 | undefined {
 	return worldCastle() ?? (world.getDynamicProperty(CASTLE_KEY) as Vector3 | undefined);
 }
 
+/** Worlds without a palace get one raised ahead of the player after a long enough journey. */
 function journeyToCastle(player: Player): void {
-	const castle = storyCastle();
-	if (castle) {
-		if (horizontalDistance(player.location, castle) <= CASTLE_REACH_DISTANCE) storyEvent(player, { kind: "reach_castle" });
-		return;
-	}
+	if (storyCastle()) return;
 	const start = world.getDynamicProperty(JOURNEY_KEY) as Vector3 | undefined;
 	if (!start) {
 		world.setDynamicProperty(JOURNEY_KEY, player.location);
@@ -149,16 +165,14 @@ function journeyToCastle(player: Player): void {
 
 function tickStory(): void {
 	const id = chapterId(currentChapter());
-	if (id === "north_mountain") {
-		for (const player of world.getDimension("overworld").getPlayers()) journeyToCastle(player);
-	} else if (id === "frozen_heart") {
-		for (const player of world.getAllPlayers()) {
-			if (hasItem(player, HEART)) storyEvent(player, { kind: "has_item", item: HEART });
-		}
+	for (const player of world.getAllPlayers()) {
+		if (player.getDynamicProperty(FROZEN_HEART_KEY) === true) applyCurse(player);
+		if (id === "north_mountain" && player.dimension.id === "minecraft:overworld") journeyToCastle(player);
+		if (id === "frozen_heart" && hasItem(player, HEART)) storyEvent(player, { kind: "has_item", item: HEART });
 	}
 }
 
-/** The Act of True Love ends the winter, and finishes the story on its last chapter. */
+/** The Act of True Love ends the winter and the frozen-heart curse, and finishes the story on its last chapter. */
 function useHeart(player: Player): void {
 	const storyNeedsIt = chapterId(currentChapter()) === "true_love";
 	if (!isWinterActive() && !storyNeedsIt) {
@@ -178,15 +192,23 @@ function useHeart(player: Player): void {
 		}
 	}
 	player.dimension.playSound("block.amethyst_block.resonate", player.location);
+	for (const p of world.getAllPlayers()) {
+		p.setDynamicProperty(FROZEN_HEART_KEY, false);
+		p.removeEffect("slowness");
+		p.removeEffect("weakness");
+	}
 	endWinter();
 	storyEvent(player, { kind: "true_love" });
 }
 
 export function registerStory(): void {
 	world.afterEvents.entityDie.subscribe(({ deadEntity, damageSource }) => {
-		if (deadEntity.typeId !== "frozen:marshmallow") return;
+		const id = deadEntity.typeId;
+		if (id !== "frozen:marshmallow" && id !== "frozen:hans") return;
 		const killer = damageSource.damagingEntity instanceof Player ? damageSource.damagingEntity : world.getAllPlayers()[0];
-		if (killer) storyEvent(killer, { kind: "kill", entity: deadEntity.typeId });
+		if (killer && storyEvent(killer, { kind: "kill", entity: id }) && id === "frozen:hans") {
+			world.sendMessage({ translate: "frozen.story.hans_defeated" });
+		}
 	});
 	world.beforeEvents.playerInteractWithEntity.subscribe((event) => {
 		if (event.itemStack?.typeId !== HEART || !CURERS.has(event.target.typeId)) return;

@@ -1,7 +1,8 @@
 import { Entity, system, world } from "@minecraft/server";
 import { duplicatesToRemove } from "./logic.ts";
 
-const CHARACTERS = ["frozen:elsa", "frozen:anna", "frozen:kristoff", "frozen:olaf", "frozen:sven", "frozen:marshmallow"];
+/** Named characters: only one of each may stand in one place. Groups (guards, trolls, townsfolk) are exempt. */
+const CHARACTERS = ["elsa", "anna", "kristoff", "olaf", "sven", "marshmallow", "hans", "duke", "oaken", "kai", "gerda", "pabbie"].map((n) => `frozen:${n}`);
 const RADIUS = 48;
 const INTERVAL_TICKS = 100;
 

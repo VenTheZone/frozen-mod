@@ -2,8 +2,10 @@ import { Block, BlockCustomComponent, Dimension, Vector3, world } from "@minecra
 
 export const MARKER = "frozen:spawn_marker";
 export const CHARACTER_STATE = "frozen:character";
-/** A marker never spawns a character if the same character is already this close (e.g. overlapping towns). */
+/** A marker never spawns a named character if the same one is already this close (e.g. overlapping towns). */
 const DUPLICATE_RADIUS = 48;
+/** Characters that come in groups; any number of them may stand together. */
+const GROUPS = new Set(["troll", "guard", "townsfolk"]);
 
 /** Replaces a structure's hidden marker block with the character it names. Runs at most once per marker. */
 function spawnFromMarker(block: Block): void {
@@ -13,7 +15,8 @@ function spawnFromMarker(block: Block): void {
 	block.setType("minecraft:air");
 	if (!character) return;
 	const type = `frozen:${character}`;
-	if (block.dimension.getEntities({ type, location, maxDistance: DUPLICATE_RADIUS }).length > 0) return;
+	const radius = GROUPS.has(character) ? 1 : DUPLICATE_RADIUS;
+	if (block.dimension.getEntities({ type, location, maxDistance: radius }).length > 0) return;
 	block.dimension.spawnEntity(type, location);
 }
 

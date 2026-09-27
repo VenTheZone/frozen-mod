@@ -1,0 +1,146 @@
+{
+	"format_version": "1.21.90",
+	"minecraft:entity": {
+		"description": {
+			"identifier": "frozen:hans",
+			"is_spawnable": true,
+			"is_summonable": true
+		},
+		"components": {
+			"minecraft:type_family": {
+				"family": [
+					"frozen_npc",
+					"hans",
+					"mob"
+				]
+			},
+			"minecraft:health": {
+				"value": 40,
+				"max": 40
+			},
+			"minecraft:collision_box": {
+				"width": 0.6,
+				"height": 1.95
+			},
+			"minecraft:movement": {
+				"value": 0.5
+			},
+			"minecraft:navigation.walk": {
+				"avoid_water": true,
+				"can_open_doors": true
+			},
+			"minecraft:movement.basic": {},
+			"minecraft:jump.static": {},
+			"minecraft:can_climb": {},
+			"minecraft:physics": {},
+			"minecraft:pushable": {
+				"is_pushable": false,
+				"is_pushable_by_piston": true
+			},
+			"minecraft:breathable": {
+				"total_supply": 15,
+				"suffocate_time": 0
+			},
+			"minecraft:nameable": {},
+			"minecraft:persistent": {},
+			"minecraft:behavior.float": {
+				"priority": 0
+			},
+			"minecraft:behavior.look_at_player": {
+				"priority": 7,
+				"look_distance": 8,
+				"probability": 0.5
+			},
+			"minecraft:behavior.random_look_around": {
+				"priority": 9
+			}
+		},
+		"events": {
+			"frozen:talked": {},
+			"minecraft:entity_spawned": {
+				"add": {
+					"component_groups": [
+						"frozen:friendly"
+					]
+				}
+			},
+			"frozen:betray": {
+				"remove": {
+					"component_groups": [
+						"frozen:friendly"
+					]
+				},
+				"add": {
+					"component_groups": [
+						"frozen:hostile"
+					]
+				}
+			}
+		},
+		"component_groups": {
+			"frozen:friendly": {
+				"minecraft:interact": {
+					"interactions": [
+						{
+							"on_interact": {
+								"filters": {
+									"test": "is_family",
+									"subject": "other",
+									"value": "player"
+								},
+								"event": "frozen:talked",
+								"target": "self"
+							},
+							"interact_text": "action.interact.frozen_talk",
+							"swing": true
+						}
+					]
+				},
+				"minecraft:damage_sensor": {
+					"triggers": [
+						{
+							"on_damage": {
+								"filters": {
+									"test": "is_family",
+									"subject": "other",
+									"value": "player"
+								}
+							},
+							"deals_damage": "no"
+						}
+					]
+				}
+			},
+			"frozen:hostile": {
+				"minecraft:boss": {
+					"hud_range": 30,
+					"should_darken_sky": false
+				},
+				"minecraft:attack": {
+					"damage": 5
+				},
+				"minecraft:behavior.melee_box_attack": {
+					"priority": 2,
+					"track_target": true
+				},
+				"minecraft:behavior.nearest_attackable_target": {
+					"priority": 1,
+					"must_see": true,
+					"entity_types": [
+						{
+							"filters": {
+								"test": "is_family",
+								"subject": "other",
+								"value": "player"
+							},
+							"max_dist": 24
+						}
+					]
+				},
+				"minecraft:behavior.hurt_by_target": {
+					"priority": 1
+				}
+			}
+		}
+	}
+}

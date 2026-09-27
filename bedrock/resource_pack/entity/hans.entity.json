@@ -2,16 +2,16 @@
 	"format_version": "1.10.0",
 	"minecraft:client_entity": {
 		"description": {
-			"identifier": "frozen:elsa",
+			"identifier": "frozen:hans",
 			"spawn_egg": {
-				"base_color": "#b4dcf5",
-				"overlay_color": "#f0ebc8"
+				"base_color": "#e8e8f0",
+				"overlay_color": "#304c96"
 			},
 			"materials": {
 				"default": "entity_alphatest"
 			},
 			"textures": {
-				"default": "textures/entity/elsa"
+				"default": "textures/entity/hans"
 			},
 			"geometry": {
 				"default": "geometry.humanoid.custom"

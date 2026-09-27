@@ -13,11 +13,12 @@ export function isWinterActive(): boolean {
 	return world.getDynamicProperty(ACTIVE_KEY) === true;
 }
 
-export function startWinter(): void {
+/** Starts the Eternal Winter. `silent` skips the announcement when the story already told the player. */
+export function startWinter(silent = false): void {
 	if (isWinterActive()) return;
 	world.setDynamicProperty(ACTIVE_KEY, true);
 	world.getDimension("overworld").setWeather(WeatherType.Rain, WEATHER_TICKS);
-	world.sendMessage({ translate: "frozen.winter.start" });
+	if (!silent) world.sendMessage({ translate: "frozen.winter.start" });
 }
 
 export function endWinter(): void {

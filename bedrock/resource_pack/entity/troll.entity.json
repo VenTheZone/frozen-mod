@@ -2,16 +2,16 @@
 	"format_version": "1.10.0",
 	"minecraft:client_entity": {
 		"description": {
-			"identifier": "frozen:elsa",
+			"identifier": "frozen:troll",
 			"spawn_egg": {
-				"base_color": "#b4dcf5",
-				"overlay_color": "#f0ebc8"
+				"base_color": "#6e736e",
+				"overlay_color": "#407040"
 			},
 			"materials": {
 				"default": "entity_alphatest"
 			},
 			"textures": {
-				"default": "textures/entity/elsa"
+				"default": "textures/entity/troll"
 			},
 			"geometry": {
 				"default": "geometry.humanoid.custom"

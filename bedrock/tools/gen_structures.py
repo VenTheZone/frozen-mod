@@ -334,11 +334,26 @@ def arendelle(with_markers=True):
         s.set(x, 1, z, lantern)
     s.container(14, 1, 29, "loot_tables/chests/arendelle.json")
 
+    # castle: the royal family, the visiting prince and duke, the staff, and guards at the door
     s.marker(16, 1, 28, "elsa")
     s.marker(15, 1, 26, "anna")
-    s.marker(18, 1, 26, "kristoff")
+    s.marker(14, 1, 24, "hans")
+    s.marker(18, 1, 24, "duke")
+    s.marker(13, 1, 28, "kai")
+    s.marker(19, 1, 28, "gerda")
+    s.marker(14, 1, 20, "guard")
+    s.marker(18, 1, 20, "guard")
+    # the lime house (east, south row) is Wandering Oaken's Trading Post; Kristoff shops for carrots there
+    s.marker(28, 1, 16, "oaken")
+    s.marker(27, 1, 14, "kristoff")
     s.marker(20, 1, 17, "sven")
     s.marker(13, 1, 15, "olaf")
+    # the troll valley: the snowfield west of the castle
+    s.marker(4, 1, 26, "pabbie")
+    for x, z in ((2, 24), (6, 28), (3, 30)):
+        s.marker(x, 1, z, "troll")
+    for x, z in ((12, 6), (20, 7), (11, 14), (21, 12), (23, 9)):
+        s.marker(x, 1, z, "townsfolk")
     return s
 
 

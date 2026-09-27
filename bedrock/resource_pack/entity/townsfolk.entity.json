@@ -1,0 +1,57 @@
+{
+	"format_version": "1.10.0",
+	"minecraft:client_entity": {
+		"description": {
+			"identifier": "frozen:townsfolk",
+			"spawn_egg": {
+				"base_color": "#a08060",
+				"overlay_color": "#406080"
+			},
+			"materials": {
+				"default": "entity_alphatest"
+			},
+			"textures": {
+				"skin_0": "textures/entity/npc/npc_1",
+				"skin_1": "textures/entity/npc/npc_2",
+				"skin_2": "textures/entity/npc/npc_3",
+				"skin_3": "textures/entity/npc/npc_4",
+				"skin_4": "textures/entity/npc/npc_5",
+				"skin_5": "textures/entity/npc/npc_6",
+				"skin_6": "textures/entity/npc/npc_7",
+				"skin_7": "textures/entity/npc/npc_8",
+				"skin_8": "textures/entity/npc/npc_9",
+				"skin_9": "textures/entity/npc/npc_10",
+				"skin_10": "textures/entity/npc/npc_Agriculture_1",
+				"skin_11": "textures/entity/npc/npc_Agriculture_2",
+				"skin_12": "textures/entity/npc/npc_Agriculture_3",
+				"skin_13": "textures/entity/npc/npc_Agriculture_4",
+				"skin_14": "textures/entity/npc/npc_Agriculture_5",
+				"skin_15": "textures/entity/npc/npc_Agriculture_6",
+				"skin_16": "textures/entity/npc/npc_Agriculture_7",
+				"skin_17": "textures/entity/npc/npc_Agriculture_8",
+				"skin_18": "textures/entity/npc/npc_Agriculture_9",
+				"skin_19": "textures/entity/npc/npc_Agriculture_10"
+			},
+			"geometry": {
+				"default": "geometry.npc"
+			},
+			"animations": {
+				"general": "animation.npc.general",
+				"look_at_target": "animation.common.look_at_target",
+				"move": "animation.npc.move"
+			},
+			"scripts": {
+				"animate": [
+					"general",
+					{
+						"move": "query.modified_move_speed"
+					},
+					"look_at_target"
+				]
+			},
+			"render_controllers": [
+				"controller.render.frozen.townsfolk"
+			]
+		}
+	}
+}

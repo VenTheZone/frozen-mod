@@ -84,10 +84,6 @@
 					"carrot"
 				]
 			},
-			"minecraft:behavior.random_stroll": {
-				"priority": 6,
-				"speed_multiplier": 0.8
-			},
 			"minecraft:behavior.look_at_player": {
 				"priority": 7,
 				"look_distance": 8

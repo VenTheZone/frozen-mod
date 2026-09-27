@@ -1,10 +1,10 @@
 import { EntityTypes, GameMode, ItemCustomComponent, Player, system, world } from "@minecraft/server";
 import { ActionFormData, MessageFormData } from "@minecraft/server-ui";
 import { placeStructure, spawnMarkersIn } from "./spawns.ts";
-import { announceChapter, currentChapter, currentChapterKey, give, storyText } from "./story.ts";
+import { giveStarterKit } from "./kit.ts";
+import { announceChapter, currentChapter, currentChapterKey, storyState, storyText } from "./story.ts";
 import { CHAPTERS } from "./storyline.ts";
 
-const VERSION = "1.4.0";
 /** Entity type defined only by the Frozen World's own pack; that world builds its own town and kit. */
 const WORLD_FLAG = "frozen_world:flag";
 
@@ -12,7 +12,6 @@ export function isFrozenWorld(): boolean {
 	return EntityTypes.get(WORLD_FLAG) !== undefined || world.scoreboard.getObjective("frozen_world") !== undefined;
 }
 const BUILT_KEY = "frozen:arendelle_built";
-const KIT_KEY = "frozen:kit_given";
 /** Worlds younger than this (20 minutes) get Arendelle built around the first player automatically. */
 const NEW_WORLD_TICKS = 20 * 60 * 20;
 /** Phones can take a while to generate spawn chunks: retry every 3 s for about 2 minutes. */
@@ -24,13 +23,6 @@ const GAME_MODES: [string, GameMode][] = [
 	["frozen.storybook.survival", GameMode.Survival],
 	["frozen.storybook.creative", GameMode.Creative],
 	["frozen.storybook.adventure", GameMode.Adventure],
-];
-const KIT: [string, number][] = [
-	["frozen:storybook", 1],
-	["frozen:elsa_glove", 1],
-	["frozen:snowflake_crystal", 3],
-	["minecraft:carrot", 8],
-	["frozen:olaf_spawn_egg", 1],
 ];
 
 /** Builds Arendelle with the player on the plaza and makes it the world spawn. Throws if it can't be placed yet. */
@@ -78,33 +70,28 @@ function tryBuildArendelle(player: Player, attemptsLeft: number): void {
 	}, RETRY_TICKS);
 }
 
-function giveKit(player: Player): void {
-	if (player.getDynamicProperty(KIT_KEY)) return;
-	for (const [id, amount] of KIT) {
-		try {
-			give(player, id, amount);
-		} catch (error) {
-			console.warn(`[frozen] could not give ${id}: ${error}`);
-		}
-	}
-	player.setDynamicProperty(KIT_KEY, true);
-	player.sendMessage({ translate: "frozen.kit.welcome" });
-}
+const KIT_DELAY_TICKS = 60;
 
 function onJoin(player: Player): void {
-	player.sendMessage({ translate: "frozen.status.loaded", with: [VERSION] });
-	if (isFrozenWorld()) {
-		system.runTimeout(() => player.isValid && announceChapter(player), 200);
-		return;
-	}
-	const shouldBuild = !world.getDynamicProperty(BUILT_KEY) && world.getAbsoluteTime() < NEW_WORLD_TICKS;
+	system.runTimeout(() => player.isValid && giveStarterKit(player), KIT_DELAY_TICKS);
+	const shouldBuild = !isFrozenWorld() && !world.getDynamicProperty(BUILT_KEY) && world.getAbsoluteTime() < NEW_WORLD_TICKS;
 	if (shouldBuild) {
-		player.sendMessage({ translate: "frozen.status.building" });
 		tryBuildArendelle(player, BUILD_RETRIES);
 	} else {
-		system.runTimeout(() => player.isValid && announceChapter(player), 100);
+		system.runTimeout(() => player.isValid && announceChapter(player), 120);
 	}
-	giveKit(player);
+}
+
+const HEARTS: [string, string][] = [["anna", "Anna"], ["elsa", "Elsa"], ["kristoff", "Kristoff"], ["olaf", "Olaf"], ["hans", "Hans"]];
+
+/** Telltale-style relationship summary for the storybook. */
+function relationships(): string {
+	const rel = storyState().rel;
+	return HEARTS.map(([id, name]) => {
+		const score = rel[id] ?? 0;
+		const hearts = score > 0 ? "§c" + "♥".repeat(Math.min(score, 5)) : score < 0 ? "§8" + "✗".repeat(Math.min(-score, 5)) : "§7-";
+		return `§f${name}: ${hearts}`;
+	}).join("§r   ");
 }
 
 async function showStorybook(player: Player): Promise<void> {
@@ -122,6 +109,7 @@ async function showStorybook(player: Player): Promise<void> {
 				storyText(id, "goal"),
 				{ text: "\n\n§7" },
 				storyText(id, "hint"),
+				{ text: "\n\n§r" + relationships() },
 			],
 		})
 		.button({ translate: "frozen.storybook.close" });

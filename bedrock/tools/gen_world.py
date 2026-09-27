@@ -18,10 +18,10 @@ import gen_structures as gs  # noqa: E402
 
 ROOT = os.path.normpath(os.path.join(HERE, ".."))
 DIST = os.path.join(ROOT, "dist")
-WORLD_NAME = "Frozen - Kingdom of Arendelle (v1.4.0)"
+WORLD_NAME = "Frozen - Kingdom of Arendelle (v2.0.0)"
 WORLD_BP_UUID = "5b1f7c9e-2d4a-4f3b-9e8c-7a6d5c4b3a21"
 WORLD_BP_MODULE_UUID = "8e2d4c6a-1b3f-4a5e-9c7d-2f4e6a8c0b13"
-WORLD_BP_VERSION = [1, 0, 3]
+WORLD_BP_VERSION = [2, 0, 0]
 PACK_DIRS = {"behavior_pack": ("behavior_packs", "Frozen_BP"), "resource_pack": ("resource_packs", "Frozen_RP")}
 
 # Flat world: bedrock at y=-64, dirt -63..-62, snow at -61, so the floor of every building is y=-60.
@@ -42,7 +42,6 @@ FLAT_LAYERS = {
 SPAWN = (0, FLOOR_Y + 1, 0)
 TOWN_PLAYER_LOCAL = (19, 16)  # the plaza spot the player stands on, same as src/setup.ts
 CASTLE_CENTER = (8, -70)  # 70 blocks north of spawn; the castle is rotated so its door faces the town
-KIT = [("frozen:storybook", 1), ("frozen:elsa_glove", 1), ("frozen:snowflake_crystal", 3), ("minecraft:carrot", 8)]
 
 
 def placements():
@@ -72,9 +71,13 @@ FLAG_ENTITY = {
 }
 
 
+GROUPS = {"troll", "guard", "townsfolk"}
+
+
 def summon(character, x, y, z):
     """Summons a character only if the same one isn't already standing there."""
-    return f"execute unless entity @e[type=frozen:{character},x={x},y={y},z={z},r=16] run summon frozen:{character} {x} {y} {z}"
+    r = 1 if character in GROUPS else 16
+    return f"execute unless entity @e[type=frozen:{character},x={x},y={y},z={z},r={r}] run summon frozen:{character} {x} {y} {z}"
 
 
 def functions(places):
@@ -86,8 +89,6 @@ def functions(places):
         f"execute if score timer frozen_world matches 1 run tickingarea add circle {CASTLE_CENTER[0]} {FLOOR_Y} {CASTLE_CENTER[1]} 2 frozen_castle",
         "execute if score built frozen_world matches 0 if score timer frozen_world matches 100 run function frozen_world/build",
     ]
-    tick += [f"give @a[tag=!frozen_kit] {item} {amount}" for item, amount in KIT]
-    tick.append("tag @a[tag=!frozen_kit] add frozen_kit")
 
     build = []
     for name, structure, origin, rotation in places:
@@ -160,7 +161,7 @@ def main():
     world_manifest = {
         "format_version": 2,
         "header": {
-            "name": "Frozen v1.4.0 - World Setup",
+            "name": "Frozen v2.0.0 - World Setup",
             "description": "Builds Arendelle and the Ice Castle when this world first loads.",
             "uuid": WORLD_BP_UUID, "version": WORLD_BP_VERSION, "min_engine_version": [1, 21, 90],
         },
