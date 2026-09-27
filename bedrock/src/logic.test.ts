@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { bridgePath, Cooldowns, facingFromYaw, snowAction, spikeRing } from "./logic.ts";
+import { bridgePath, Cooldowns, duplicatesToRemove, facingFromYaw, snowAction, spikeRing } from "./logic.ts";
 
 const has = (list: { x: number; y: number; z: number }[], x: number, y: number, z: number) =>
 	list.some((p) => p.x === x && p.y === y && p.z === z);
@@ -46,6 +46,15 @@ test("snowAction freezes still water, grows snow up to 3 layers, places on solid
 	assert.equal(snowAction({ topTypeId: "minecraft:snow_layer", snowHeight: 2, topIsSolid: false, aboveIsAir: true }), "none");
 	assert.equal(snowAction({ topTypeId: "minecraft:grass_block", topIsSolid: true, aboveIsAir: true }), "place");
 	assert.equal(snowAction({ topTypeId: "minecraft:oak_leaves", topIsSolid: false, aboveIsAir: true }), "none");
+});
+
+test("duplicatesToRemove keeps one per cluster and never removes tamed or named ones", () => {
+	const at = (x: number, keep = false) => ({ x, y: 0, z: 0, keep });
+	assert.deepEqual(duplicatesToRemove([at(0), at(1), at(2), at(3)], 48), [1, 2, 3]);
+	assert.deepEqual(duplicatesToRemove([at(0), at(100)], 48), []);
+	assert.deepEqual(duplicatesToRemove([at(0), at(5, true)], 48), [0]);
+	assert.deepEqual(duplicatesToRemove([at(0, true), at(5, true)], 48), []);
+	assert.deepEqual(duplicatesToRemove([], 48), []);
 });
 
 test("cooldowns gate per key", () => {

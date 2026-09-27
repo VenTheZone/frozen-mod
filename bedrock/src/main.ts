@@ -1,4 +1,5 @@
 import { system } from "@minecraft/server";
+import { registerCleanup } from "./cleanup.ts";
 import { gloveComponent, meltComponent } from "./powers.ts";
 import { registerSetup, storybookComponent } from "./setup.ts";
 import { spawnMarkerComponent } from "./spawns.ts";
@@ -12,6 +13,7 @@ system.beforeEvents.startup.subscribe(({ itemComponentRegistry, blockComponentRe
 	blockComponentRegistry.registerCustomComponent("frozen:spawn_marker", spawnMarkerComponent);
 });
 
+registerCleanup();
 registerWinter();
 registerStory();
 registerSetup();

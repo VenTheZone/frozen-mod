@@ -1,0 +1,24 @@
+import { Entity, system, world } from "@minecraft/server";
+import { duplicatesToRemove } from "./logic.ts";
+
+const CHARACTERS = ["frozen:elsa", "frozen:anna", "frozen:kristoff", "frozen:olaf", "frozen:sven", "frozen:marshmallow"];
+const RADIUS = 48;
+const INTERVAL_TICKS = 100;
+
+const isProtected = (e: Entity) => e.nameTag !== "" || e.getComponent("minecraft:is_tamed") !== undefined;
+
+/** Removes stacked copies of the same character, so a spawning mistake can never flood a world. */
+function removeDuplicates(): void {
+	const overworld = world.getDimension("overworld");
+	for (const type of CHARACTERS) {
+		const found = overworld.getEntities({ type });
+		const placed = found.map((e) => ({ ...e.location, keep: isProtected(e) }));
+		for (const i of duplicatesToRemove(placed, RADIUS)) {
+			found[i].remove();
+		}
+	}
+}
+
+export function registerCleanup(): void {
+	system.runInterval(removeDuplicates, INTERVAL_TICKS);
+}

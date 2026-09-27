@@ -1,15 +1,15 @@
-import { ItemCustomComponent, Player, system, world } from "@minecraft/server";
+import { EntityTypes, ItemCustomComponent, Player, system, world } from "@minecraft/server";
 import { ActionFormData, MessageFormData } from "@minecraft/server-ui";
 import { placeStructure, spawnMarkersIn } from "./spawns.ts";
 import { announceChapter, currentChapter, currentChapterKey, give } from "./story.ts";
 import { CHAPTERS } from "./storyline.ts";
 
-const VERSION = "1.2.3";
-/** Scoreboard created by the Frozen World's setup functions; that world builds its own town and kit. */
-export const WORLD_OBJECTIVE = "frozen_world";
+const VERSION = "1.2.4";
+/** Entity type defined only by the Frozen World's own pack; that world builds its own town and kit. */
+const WORLD_FLAG = "frozen_world:flag";
 
 export function isFrozenWorld(): boolean {
-	return world.scoreboard.getObjective(WORLD_OBJECTIVE) !== undefined;
+	return EntityTypes.get(WORLD_FLAG) !== undefined || world.scoreboard.getObjective("frozen_world") !== undefined;
 }
 const BUILT_KEY = "frozen:arendelle_built";
 const KIT_KEY = "frozen:kit_given";

@@ -88,6 +88,31 @@ export function snowAction(s: SurfaceInfo): SnowAction {
 	return s.topIsSolid && s.aboveIsAir ? "place" : "none";
 }
 
+export interface Placed extends Vec3 {
+	/** Tamed or named: never removed. */
+	keep: boolean;
+}
+
+/**
+ * Indices of characters to remove so that no two of the same kind stand within `radius`
+ * of each other. Protected ones are always kept and win over unprotected neighbours.
+ */
+export function duplicatesToRemove(characters: Placed[], radius: number): number[] {
+	const order = characters.map((_, i) => i).sort((a, b) => Number(characters[b].keep) - Number(characters[a].keep));
+	const kept: Placed[] = [];
+	const remove: number[] = [];
+	for (const i of order) {
+		const c = characters[i];
+		const crowded = kept.some((k) => Math.hypot(k.x - c.x, k.y - c.y, k.z - c.z) < radius);
+		if (crowded && !c.keep) {
+			remove.push(i);
+		} else {
+			kept.push(c);
+		}
+	}
+	return remove.sort((a, b) => a - b);
+}
+
 /** Per-player, per-ability cooldown gate keyed by game tick. */
 export class Cooldowns {
 	private readonly readyAt = new Map<string, number>();
